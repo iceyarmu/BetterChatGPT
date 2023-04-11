@@ -40,11 +40,33 @@ const CodeBar = React.memo(
           className='flex ml-auto gap-2'
           onClick={async () => {
             const codeString = codeRef.current?.textContent;
-            if (codeString)
-              navigator.clipboard.writeText(codeString).then(() => {
-                setIsCopied(true);
-                setTimeout(() => setIsCopied(false), 3000);
-              });
+            if (codeString) {
+              // Navigator clipboard api needs a secure context (https)
+              if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(codeString).then(() => {
+                  setIsCopied(true);
+                  setTimeout(() => setIsCopied(false), 3000);
+                });
+              } else {
+                  // Use the 'out of viewport hidden text area' trick
+                  const textArea = document.createElement("textarea");
+                  textArea.value = codeString;
+                  // Move textarea out of the viewport so it's not visible
+                  textArea.style.position = "absolute";
+                  textArea.style.left = "-999999px";
+                  document.body.prepend(textArea);
+                  textArea.select();
+                  try {
+                      document.execCommand('copy');
+                      setIsCopied(true);
+                      setTimeout(() => setIsCopied(false), 3000);
+                  } catch (error) {
+                      console.error(error);
+                  } finally {
+                      textArea.remove();
+                  }
+              }
+            }
           }}
         >
           {isCopied ? (

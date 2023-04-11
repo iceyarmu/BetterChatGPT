@@ -48,12 +48,33 @@ export const limitMessageTokens = (
 ): MessageInterface[] => {
   const limitedMessages: MessageInterface[] = [];
   let tokenCount = 0;
+  let messageCount = 0;
+  const maxMessages = 21;
 
   for (let i = messages.length - 1; i >= 0; i--) {
     const count = countTokens([messages[i]], model);
-    if (count + tokenCount > limit) break;
+    if (count + tokenCount > limit - 250 || messageCount >= maxMessages) break;
     tokenCount += count;
+    messageCount++;
     limitedMessages.unshift({ ...messages[i] });
+  }
+
+  if (limitedMessages.length > 0 && limitedMessages[0].role !== 'system') {
+    const date = new Date();
+    const dateString =
+      date.getFullYear() +
+      '-' +
+      ('0' + (date.getMonth() + 1)).slice(-2) +
+      '-' +
+      ('0' + date.getDate()).slice(-2) +
+      ' ' +
+      ('0' + date.getHours()).slice(-2) +
+      ':' +
+      ('0' + date.getMinutes()).slice(-2);
+    limitedMessages.unshift({
+      role: 'system',
+      content: "You are ChatGPT, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
+    })
   }
 
   return limitedMessages;

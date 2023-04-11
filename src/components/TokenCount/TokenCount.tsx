@@ -26,7 +26,7 @@ const TokenCount = React.memo(() => {
   }, [model, tokenCount]);
 
   useEffect(() => {
-    if (!generating) setTokenCount(countTokens(messages, model));
+    /*if (!generating)*/ setTokenCount(countTokens(messages, model));
   }, [messages, generating]);
 
   return (

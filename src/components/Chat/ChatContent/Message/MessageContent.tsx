@@ -423,6 +423,8 @@ const EditView = ({
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      textareaRef.current.focus();
+      textareaRef.current.select()
     }
   }, []);
 
