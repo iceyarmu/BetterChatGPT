@@ -10,7 +10,7 @@ const ApiPopup = () => {
 
   const apiKey = useStore((state) => state.apiKey);
   const setApiKey = useStore((state) => state.setApiKey);
-  const firstVisit = useStore((state) => state.firstVisit);
+  const firstVisit = false;//useStore((state) => state.firstVisit);
   const setFirstVisit = useStore((state) => state.setFirstVisit);
 
   const [_apiKey, _setApiKey] = useState<string>(apiKey || '');

@@ -25,9 +25,9 @@ const useSubmit = () => {
     let data;
     if (!apiKey || apiKey.length === 0) {
       // official endpoint
-      if (apiEndpoint === officialAPIEndpoint) {
-        throw new Error(t('noApiKeyWarning') as string);
-      }
+      // if (apiEndpoint === officialAPIEndpoint) {
+      //   throw new Error(t('noApiKeyWarning') as string);
+      // }
 
       // other endpoints
       data = await getChatCompletion(
@@ -76,9 +76,9 @@ const useSubmit = () => {
       // no api key (free)
       if (!apiKey || apiKey.length === 0) {
         // official endpoint
-        if (apiEndpoint === officialAPIEndpoint) {
-          throw new Error(t('noApiKeyWarning') as string);
-        }
+        // if (apiEndpoint === officialAPIEndpoint) {
+        //   throw new Error(t('noApiKeyWarning') as string);
+        // }
 
         // other endpoints
         stream = await getChatCompletionStream(
@@ -162,10 +162,17 @@ const useSubmit = () => {
         !currChats[currentChatIndex]?.titleSet
       ) {
         const messages_length = currChats[currentChatIndex].messages.length;
-        const assistant_message =
+        let assistant_message =
           currChats[currentChatIndex].messages[messages_length - 1].content;
-        const user_message =
+        let user_message =
           currChats[currentChatIndex].messages[messages_length - 2].content;
+
+        if (assistant_message.length > 200) {
+          assistant_message = assistant_message.substring(0, 100) + ' ... ' + assistant_message.substring(assistant_message.length-100, assistant_message.length);;
+        }
+        if (user_message.length > 200) {
+          user_message = user_message.substring(0, 100) + ' ... ' + user_message.substring(user_message.length-100, user_message.length);;
+        }
 
         const message: MessageInterface = {
           role: 'user',
