@@ -18,6 +18,7 @@ const CommandPrompt = ({
   const prompts = useStore((state) => state.prompts);
   const [_prompts, _setPrompts] = useState<Prompt[]>(prompts);
   const [input, setInput] = useState<string>('');
+  const [promptsRemote, setPromptsRemote] = useState<any[]>([]);
 
   const [dropDown, setDropDown, dropDownRef] = useHideOnOutsideClick();
   const { i18n } = useTranslation();
@@ -37,8 +38,8 @@ const CommandPrompt = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
+        dropDownRef.current &&
+        !dropDownRef.current.contains(event.target as Node)
       ) {
         setDropDown(false);
       }
@@ -53,7 +54,7 @@ const CommandPrompt = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [dropdownRef, dropDown]);
+  }, [dropDownRef, dropDown]);
 
   useEffect(() => {
     if (promptsRemote.length > 0) return;
@@ -75,7 +76,7 @@ const CommandPrompt = ({
             dynamicTyping: true,
           }).data as [];
         const newPrompts = results
-          .filter((data) => data["act"] !== "能涩涩会动的妹妹！")
+          .filter((data) => data["act"].indexOf('涩涩') === -1)
           .map((data) => {
             return {
               id: uuidv4(),
