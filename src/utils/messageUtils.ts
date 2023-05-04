@@ -26,22 +26,67 @@ export const getChatGPTEncoding = (
   const msgSep = isGpt3 ? '\n' : '';
   const roleSep = isGpt3 ? '\n' : '<|im_sep|>';
 
-  const serialized = [
+  const serialized = //[
     messages
       .map(({ role, content }) => {
         return `<|im_start|>${role}${roleSep}${content}<|im_end|>`;
       })
-      .join(msgSep),
-    `<|im_start|>assistant${roleSep}`,
-  ].join(msgSep);
+      .join(msgSep);//,
+    // `<|im_start|>assistant${roleSep}`,
+  // ].join(msgSep);
 
   return encoder.encode(serialized, 'all');
 };
 
+
 const countTokens = (messages: MessageInterface[], model: ModelOptions) => {
   if (messages.length === 0) return 0;
   return getChatGPTEncoding(messages, model).length;
+}
+
+export const countCurrentTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
+  if (messages.length === 0) return [0,0];
+  let promptTokens = getChatGPTEncoding(messages.slice(0, -1), model).length + 48;
+  let completionTokens = getChatGPTEncoding([messages[messages.length-1]], model).length - 4;
+  return [promptTokens, completionTokens];
 };
+
+export const countTotalTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
+  if (messages.length === 0) return [0,0];
+  let promptTokens = 0;
+  let completionTokens = 0;
+  let roundMessages = [];
+  
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    if (message.role === 'assistant') {
+      if (roundMessages.length > 0) {
+        promptTokens += getChatGPTEncoding(roundMessages, model).length + 48;
+      }
+      completionTokens += getChatGPTEncoding([message], model).length - 4;
+    }
+    roundMessages.push(message);
+  }
+  return [promptTokens, completionTokens];
+};
+
+const genSystemMessage = () : MessageInterface => {
+  const date = new Date();
+  const dateString =
+    date.getFullYear() +
+    '-' +
+    ('0' + (date.getMonth() + 1)).slice(-2) +
+    '-' +
+    ('0' + date.getDate()).slice(-2) +
+    ' ' +
+    ('0' + date.getHours()).slice(-2) +
+    ':' +
+    ('0' + date.getMinutes()).slice(-2);
+  return {
+    role: 'system',
+    content: "You are ChatGPT, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
+  }
+}
 
 export const limitMessageTokens = (
   messages: MessageInterface[],
@@ -62,21 +107,7 @@ export const limitMessageTokens = (
   }
 
   if (limitedMessages.length > 0 && limitedMessages[0].role !== 'system') {
-    const date = new Date();
-    const dateString =
-      date.getFullYear() +
-      '-' +
-      ('0' + (date.getMonth() + 1)).slice(-2) +
-      '-' +
-      ('0' + date.getDate()).slice(-2) +
-      ' ' +
-      ('0' + date.getHours()).slice(-2) +
-      ':' +
-      ('0' + date.getMinutes()).slice(-2);
-    limitedMessages.unshift({
-      role: 'system',
-      content: "You are ChatGPT, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
-    })
+    limitedMessages.unshift(genSystemMessage())
   }
 
   return limitedMessages;

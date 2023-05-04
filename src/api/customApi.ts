@@ -1,6 +1,6 @@
 import { ConfigInterface, MessageInterface } from '@type/chat';
 
-export const endpoint = '/chat/completions';
+export const endpoint = '/v4/chat/completions';
 
 export const validateApiKey = async (apiKey: string) => {
   try {

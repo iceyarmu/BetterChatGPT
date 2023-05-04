@@ -23,6 +23,8 @@ const useSubmit = () => {
     message: MessageInterface[]
   ): Promise<string> => {
     let data;
+    let config = {..._defaultChatConfig};
+    config.model = 'gpt-3.5-turbo';
     if (!apiKey || apiKey.length === 0) {
       // official endpoint
       // if (apiEndpoint === officialAPIEndpoint) {
@@ -33,14 +35,14 @@ const useSubmit = () => {
       data = await getChatCompletion(
         useStore.getState().apiEndpoint,
         message,
-        _defaultChatConfig
+        config
       );
     } else if (apiKey) {
       // own apikey
       data = await getChatCompletion(
         useStore.getState().apiEndpoint,
         message,
-        _defaultChatConfig,
+        config,
         apiKey
       );
     }
