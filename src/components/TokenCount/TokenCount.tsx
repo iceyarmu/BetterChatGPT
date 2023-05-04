@@ -33,10 +33,9 @@ const TokenCount = React.memo(() => {
   }, [messages, generating]);
 
   return (
-    <div className='absolute top-[-32px] right-0'>
+    <div className='absolute top-[-16px] right-0'>
       <div className='text-xs italic text-gray-900 dark:text-gray-300'>
-        Current Tokens: {tokenCount[0][0]}+{tokenCount[0][1]} (${cost[0].toPrecision(3)},￥{(cost[0] * 6.91).toPrecision(3)})<br />
-        Total Tokens: {tokenCount[1][0]}+{tokenCount[1][1]} (${cost[1].toPrecision(3)},￥{(cost[1] * 6.91).toPrecision(3)})
+        Tokens: {tokenCount[1][0]}+{tokenCount[1][1]} (${cost[1].toPrecision(3)})
       </div>
     </div>
   );

@@ -46,7 +46,8 @@ const countTokens = (messages: MessageInterface[], model: ModelOptions) => {
 
 export const countCurrentTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
   if (messages.length === 0) return [0,0];
-  let promptTokens = getChatGPTEncoding(messages.slice(0, -1), model).length + 48;
+  let roundMessages = messages.slice(-6).slice(0, -1);
+  let promptTokens = getChatGPTEncoding(roundMessages, model).length + 49;
   let completionTokens = getChatGPTEncoding([messages[messages.length-1]], model).length - 4;
   return [promptTokens, completionTokens];
 };
@@ -56,16 +57,14 @@ export const countTotalTokens = (messages: MessageInterface[], model: ModelOptio
   let promptTokens = 0;
   let completionTokens = 0;
   let roundMessages = [];
-  
   for (let i = 0; i < messages.length; i++) {
     const message = messages[i];
-    if (message.role === 'assistant') {
-      if (roundMessages.length > 0) {
-        promptTokens += getChatGPTEncoding(roundMessages, model).length + 48;
-      }
-      completionTokens += getChatGPTEncoding([message], model).length - 4;
-    }
     roundMessages.push(message);
+    if (message.role === 'assistant') {
+      const [prompt, completion] = countCurrentTokens(roundMessages, model);
+      promptTokens += prompt;
+      completionTokens += completion;
+    }
   }
   return [promptTokens, completionTokens];
 };
@@ -84,7 +83,7 @@ const genSystemMessage = () : MessageInterface => {
     ('0' + date.getMinutes()).slice(-2);
   return {
     role: 'system',
-    content: "You are ChatGPT, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
+    content: "You are ChatGPT 4, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
   }
 }
 
@@ -96,11 +95,11 @@ export const limitMessageTokens = (
   const limitedMessages: MessageInterface[] = [];
   let tokenCount = 0;
   let messageCount = 0;
-  const maxMessages = 21;
+  const maxMessages = 6;
 
   for (let i = messages.length - 1; i >= 0; i--) {
     const count = countTokens([messages[i]], model);
-    if (count + tokenCount > limit - 250 || messageCount >= maxMessages) break;
+    if (count + tokenCount > limit - 250 || messageCount > maxMessages) break;
     tokenCount += count;
     messageCount++;
     limitedMessages.unshift({ ...messages[i] });
@@ -115,16 +114,14 @@ export const limitMessageTokens = (
 
 export const updateTotalTokenUsed = (
   model: ModelOptions,
-  promptMessages: MessageInterface[],
-  completionMessage: MessageInterface
+  messages: MessageInterface[]
 ) => {
   const setTotalTokenUsed = useStore.getState().setTotalTokenUsed;
   const updatedTotalTokenUsed: TotalTokenUsed = JSON.parse(
     JSON.stringify(useStore.getState().totalTokenUsed)
   );
 
-  const newPromptTokens = countTokens(promptMessages, model);
-  const newCompletionTokens = countTokens([completionMessage], model);
+  const [newPromptTokens, newCompletionTokens] = countCurrentTokens(messages, model);
   const { promptTokens = 0, completionTokens = 0 } =
     updatedTotalTokenUsed[model] ?? {};
 

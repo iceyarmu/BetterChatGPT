@@ -152,8 +152,7 @@ const useSubmit = () => {
         const messages = currChats[currentChatIndex].messages;
         updateTotalTokenUsed(
           model,
-          messages.slice(0, -1),
-          messages[messages.length - 1]
+          messages
         );
       }
 
@@ -193,13 +192,13 @@ const useSubmit = () => {
         setChats(updatedChats);
 
         // update tokens used for generating title
-        if (countTotalTokens) {
-          const model = currChats[currentChatIndex].config.model;
-          updateTotalTokenUsed(model, [message], {
-            role: 'assistant',
-            content: title,
-          });
-        }
+        // if (countTotalTokens) {
+        //   const model = currChats[currentChatIndex].config.model;
+        //   updateTotalTokenUsed(model, [message], {
+        //     role: 'assistant',
+        //     content: title,
+        //   });
+        // }
       }
     } catch (e: unknown) {
       const err = (e as Error).message;
