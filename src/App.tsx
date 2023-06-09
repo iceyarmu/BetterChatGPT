@@ -10,6 +10,7 @@ import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
 import ApiPopup from '@components/ApiPopup';
 import Toast from '@components/Toast';
+import useAddChat from '@hooks/useAddChat';
 
 function App() {
   const initialiseNewChat = useInitialiseNewChat();
@@ -17,6 +18,7 @@ function App() {
   const setTheme = useStore((state) => state.setTheme);
   const setApiKey = useStore((state) => state.setApiKey);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
+  const addChat = useAddChat();
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
@@ -61,15 +63,18 @@ function App() {
     } else {
       // existing local storage
       const chats = useStore.getState().chats;
-      const currentChatIndex = useStore.getState().currentChatIndex;
+      // const currentChatIndex = useStore.getState().currentChatIndex;
       if (!chats || chats.length === 0) {
         initialiseNewChat();
       }
       if (
-        chats &&
-        !(currentChatIndex >= 0 && currentChatIndex < chats.length)
+        chats && chats.length > 0
+        // !(currentChatIndex >= 0 && currentChatIndex < chats.length)
       ) {
         setCurrentChatIndex(0);
+      }
+      if (chats && chats.length > 0 && chats[0].messages.length > 0) {
+        addChat();
       }
     }
   }, []);

@@ -13,13 +13,13 @@ const NewFolder = () => {
 
   const addFolder = () => {
     let folderIndex = 1;
-    let name = `New Folder ${folderIndex}`;
+    let name = `${t('newFolder')} ${folderIndex}`;
 
     const folders = useStore.getState().folders;
 
     while (Object.values(folders).some((folder) => folder.name === name)) {
       folderIndex += 1;
-      name = `New Folder ${folderIndex}`;
+      name = `${t('newFolder')} ${folderIndex}`;
     }
 
     const updatedFolders: FolderCollection = JSON.parse(

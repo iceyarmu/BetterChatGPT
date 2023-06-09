@@ -11,22 +11,18 @@ const dateString =
   ('0' + date.getDate()).slice(-2);
 
 // default system message obtained using the following method: https://twitter.com/DeminDimin/status/1619935545144279040
-export const _defaultSystemMessage =
-  import.meta.env.VITE_DEFAULT_SYSTEM_MESSAGE ??
-  `You are ChatGPT, a large language model trained by OpenAI.
-Carefully heed the user's instructions. 
-Respond using Markdown.`;
+export const _defaultSystemMessage = ``;
 
 export const modelOptions: ModelOptions[] = [
   'gpt-3.5-turbo',
   'gpt-4',
-  'gpt-4-32k',
+  // 'gpt-4-32k',
   // 'gpt-3.5-turbo-0301',
   // 'gpt-4-0314',
   // 'gpt-4-32k-0314',
 ];
 
-export const defaultModel = 'gpt-3.5-turbo';
+export const defaultModel = 'gpt-4';
 
 export const modelMaxToken = {
   'gpt-3.5-turbo': 4096,
@@ -64,7 +60,7 @@ export const modelCost = {
   },
 };
 
-export const defaultUserMaxToken = 4000;
+export const defaultUserMaxToken = 4096;
 
 export const _defaultChatConfig: ConfigInterface = {
   model: defaultModel,

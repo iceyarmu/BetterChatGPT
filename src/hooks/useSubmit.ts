@@ -23,30 +23,28 @@ const useSubmit = () => {
     message: MessageInterface[]
   ): Promise<string> => {
     let data;
-    try {
-      if (!apiKey || apiKey.length === 0) {
-        // official endpoint
-        if (apiEndpoint === officialAPIEndpoint) {
-          throw new Error(t('noApiKeyWarning') as string);
-        }
+    let config = {..._defaultChatConfig};
+    config.model = 'gpt-3.5-turbo';
+    if (!apiKey || apiKey.length === 0) {
+      // official endpoint
+      // if (apiEndpoint === officialAPIEndpoint) {
+      //   throw new Error(t('noApiKeyWarning') as string);
+      // }
 
-        // other endpoints
-        data = await getChatCompletion(
-          useStore.getState().apiEndpoint,
-          message,
-          _defaultChatConfig
-        );
-      } else if (apiKey) {
-        // own apikey
-        data = await getChatCompletion(
-          useStore.getState().apiEndpoint,
-          message,
-          _defaultChatConfig,
-          apiKey
-        );
-      }
-    } catch (error: unknown) {
-      throw new Error(`Error generating title!\n${(error as Error).message}`);
+      // other endpoints
+      data = await getChatCompletion(
+        useStore.getState().apiEndpoint,
+        message,
+        config
+      );
+    } else if (apiKey) {
+      // own apikey
+      data = await getChatCompletion(
+        useStore.getState().apiEndpoint,
+        message,
+        config,
+        apiKey
+      );
     }
     return data.choices[0].message.content;
   };
@@ -80,9 +78,9 @@ const useSubmit = () => {
       // no api key (free)
       if (!apiKey || apiKey.length === 0) {
         // official endpoint
-        if (apiEndpoint === officialAPIEndpoint) {
-          throw new Error(t('noApiKeyWarning') as string);
-        }
+        // if (apiEndpoint === officialAPIEndpoint) {
+        //   throw new Error(t('noApiKeyWarning') as string);
+        // }
 
         // other endpoints
         stream = await getChatCompletionStream(
@@ -154,8 +152,7 @@ const useSubmit = () => {
         const messages = currChats[currentChatIndex].messages;
         updateTotalTokenUsed(
           model,
-          messages.slice(0, -1),
-          messages[messages.length - 1]
+          messages
         );
       }
 
@@ -166,10 +163,17 @@ const useSubmit = () => {
         !currChats[currentChatIndex]?.titleSet
       ) {
         const messages_length = currChats[currentChatIndex].messages.length;
-        const assistant_message =
+        let assistant_message =
           currChats[currentChatIndex].messages[messages_length - 1].content;
-        const user_message =
+        let user_message =
           currChats[currentChatIndex].messages[messages_length - 2].content;
+
+        if (assistant_message.length > 200) {
+          assistant_message = assistant_message.substring(0, 100) + ' ... ' + assistant_message.substring(assistant_message.length-100, assistant_message.length);;
+        }
+        if (user_message.length > 200) {
+          user_message = user_message.substring(0, 100) + ' ... ' + user_message.substring(user_message.length-100, user_message.length);;
+        }
 
         const message: MessageInterface = {
           role: 'user',
@@ -189,7 +193,7 @@ const useSubmit = () => {
 
         // update tokens used for generating title
         if (countTotalTokens) {
-          const model = _defaultChatConfig.model;
+          const model = 'gpt-3.5-turbo';
           updateTotalTokenUsed(model, [message], {
             role: 'assistant',
             content: title,

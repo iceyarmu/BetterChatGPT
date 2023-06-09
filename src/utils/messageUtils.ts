@@ -26,22 +26,66 @@ export const getChatGPTEncoding = (
   const msgSep = isGpt3 ? '\n' : '';
   const roleSep = isGpt3 ? '\n' : '<|im_sep|>';
 
-  const serialized = [
+  const serialized = //[
     messages
       .map(({ role, content }) => {
         return `<|im_start|>${role}${roleSep}${content}<|im_end|>`;
       })
-      .join(msgSep),
-    `<|im_start|>assistant${roleSep}`,
-  ].join(msgSep);
+      .join(msgSep);//,
+    // `<|im_start|>assistant${roleSep}`,
+  // ].join(msgSep);
 
   return encoder.encode(serialized, 'all');
 };
 
+
 const countTokens = (messages: MessageInterface[], model: ModelOptions) => {
   if (messages.length === 0) return 0;
   return getChatGPTEncoding(messages, model).length;
+}
+
+export const countCurrentTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
+  if (messages.length === 0) return [0,0];
+  let roundMessages = messages.slice(-6).slice(0, -1);
+  let promptTokens = getChatGPTEncoding(roundMessages, model).length + 49;
+  let completionTokens = getChatGPTEncoding([messages[messages.length-1]], model).length - 4;
+  return [promptTokens, completionTokens];
 };
+
+export const countTotalTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
+  if (messages.length === 0) return [0,0];
+  let promptTokens = 0;
+  let completionTokens = 0;
+  let roundMessages = [];
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    roundMessages.push(message);
+    if (message.role === 'assistant') {
+      const [prompt, completion] = countCurrentTokens(roundMessages, model);
+      promptTokens += prompt;
+      completionTokens += completion;
+    }
+  }
+  return [promptTokens, completionTokens];
+};
+
+const genSystemMessage = () : MessageInterface => {
+  const date = new Date();
+  const dateString =
+    date.getFullYear() +
+    '-' +
+    ('0' + (date.getMonth() + 1)).slice(-2) +
+    '-' +
+    ('0' + date.getDate()).slice(-2) +
+    ' ' +
+    ('0' + date.getHours()).slice(-2) +
+    ':' +
+    ('0' + date.getMinutes()).slice(-2);
+  return {
+    role: 'system',
+    content: "You are ChatGPT 4, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
+  }
+}
 
 export const limitMessageTokens = (
   messages: MessageInterface[],
@@ -50,6 +94,8 @@ export const limitMessageTokens = (
 ): MessageInterface[] => {
   const limitedMessages: MessageInterface[] = [];
   let tokenCount = 0;
+  let messageCount = 0;
+  const maxMessages = 6;
 
   const isSystemFirstMessage = messages[0]?.role === 'system';
   let retainSystemMessage = false;
@@ -67,8 +113,9 @@ export const limitMessageTokens = (
   // until the token limit is reached (excludes first message)
   for (let i = messages.length - 1; i >= 1; i--) {
     const count = countTokens([messages[i]], model);
-    if (count + tokenCount > limit) break;
+    if (count + tokenCount > limit - 250 || messageCount > maxMessages) break;
     tokenCount += count;
+    messageCount++;
     limitedMessages.unshift({ ...messages[i] });
   }
 
@@ -89,16 +136,14 @@ export const limitMessageTokens = (
 
 export const updateTotalTokenUsed = (
   model: ModelOptions,
-  promptMessages: MessageInterface[],
-  completionMessage: MessageInterface
+  messages: MessageInterface[]
 ) => {
   const setTotalTokenUsed = useStore.getState().setTotalTokenUsed;
   const updatedTotalTokenUsed: TotalTokenUsed = JSON.parse(
     JSON.stringify(useStore.getState().totalTokenUsed)
   );
 
-  const newPromptTokens = countTokens(promptMessages, model);
-  const newCompletionTokens = countTokens([completionMessage], model);
+  const [newPromptTokens, newCompletionTokens] = countCurrentTokens(messages, model);
   const { promptTokens = 0, completionTokens = 0 } =
     updatedTotalTokenUsed[model] ?? {};
 

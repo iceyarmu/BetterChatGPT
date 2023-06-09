@@ -82,7 +82,10 @@ const ChatHistory = React.memo(
     };
 
     useEffect(() => {
-      if (inputRef && inputRef.current) inputRef.current.focus();
+      if (inputRef && inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.select();
+      }
     }, [isEdit]);
 
     return (
@@ -97,7 +100,7 @@ const ChatHistory = React.memo(
         onClick={() => {
           if (!generating) setCurrentChatIndex(chatIndex);
         }}
-        draggable
+        draggable={!isEdit}
         onDragStart={handleDragStart}
       >
         <ChatIcon />
