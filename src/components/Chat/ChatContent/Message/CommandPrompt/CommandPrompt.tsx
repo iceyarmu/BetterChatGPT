@@ -4,8 +4,6 @@ import useStore from '@store/store';
 import { useTranslation } from 'react-i18next';
 import { matchSorter } from 'match-sorter';
 import { Prompt } from '@type/prompt';
-import Papa from 'papaparse';
-import { v4 as uuidv4 } from 'uuid';
 
 import useHideOnOutsideClick from '@hooks/useHideOnOutsideClick';
 
@@ -19,10 +17,8 @@ const CommandPrompt = ({
   const [_prompts, _setPrompts] = useState<Prompt[]>(prompts);
   const [input, setInput] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const [promptsRemote, setPromptsRemote] = useState<any[]>([]);
 
   const [dropDown, setDropDown, dropDownRef] = useHideOnOutsideClick();
-  const { i18n } = useTranslation();
 
   useEffect(() => {
     if (dropDown && inputRef.current) {
@@ -32,73 +28,16 @@ const CommandPrompt = ({
   }, [dropDown]);
 
   useEffect(() => {
-    const filteredPrompts = matchSorter(useStore.getState().prompts.concat(promptsRemote), input, {
+    const filteredPrompts = matchSorter(useStore.getState().prompts, input, {
       keys: ['name'],
     });
     _setPrompts(filteredPrompts);
-  }, [input, promptsRemote]);
+  }, [input]);
 
   useEffect(() => {
-    _setPrompts(prompts.concat(promptsRemote));
+    _setPrompts(prompts);
     setInput('');
   }, [prompts]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropDownRef.current &&
-        !dropDownRef.current.contains(event.target as Node)
-      ) {
-        setDropDown(false);
-      }
-    };
-
-    if (dropDown) {
-      document.addEventListener('mousedown', handleClickOutside);
-    } else {
-      document.removeEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [dropDownRef, dropDown]);
-
-  useEffect(() => {
-    if (promptsRemote.length > 0) return;
-    async function fetchData() {
-      try {
-        const isZh = i18n.language.indexOf('zh') >= 0;
-        const url = isZh ?
-        'https://raw.githubusercontent.com/PlexPt/awesome-chatgpt-prompts-zh/main/prompts-zh.json' :
-        'https://raw.githubusercontent.com/f/awesome-chatgpt-prompts/main/prompts.csv';
-        const response = await fetch(url);
-        const csvString = await response.text();
-        const results = isZh ?
-          JSON.parse(csvString) as [] :
-          Papa.parse(csvString, {
-            header: true,
-            delimiter: ',',
-            newline: '\n',
-            skipEmptyLines: true,
-            dynamicTyping: true,
-          }).data as [];
-        const newPrompts = results
-          .filter((data) => data["act"].indexOf('涩涩') === -1)
-          .map((data) => {
-            return {
-              id: uuidv4(),
-              name: data["act"],
-              prompt: data["prompt"],
-            };
-        });
-        setPromptsRemote(newPrompts);
-      } catch (error) {
-        console.error('Error fetching and parsing CSV data:', error);
-      }
-    }
-    fetchData();
-  }, []);
 
   return (
     <div className='relative max-wd-sm' ref={dropDownRef}>
