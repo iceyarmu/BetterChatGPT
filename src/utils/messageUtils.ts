@@ -134,7 +134,7 @@ export const limitMessageTokens = (
   return limitedMessages;
 };
 
-export const updateTotalTokenUsed = (
+export const updateTotalTokenUsed = ( 
   model: ModelOptions,
   messages: MessageInterface[]
 ) => {

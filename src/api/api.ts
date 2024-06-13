@@ -1,7 +1,6 @@
 import { ShareGPTSubmitBodyInterface } from '@type/api';
 import { ConfigInterface, MessageInterface, ModelOptions } from '@type/chat';
 import { isAzureEndpoint } from '@utils/api';
-import { ModelOptions } from '@type/chat';
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -22,8 +21,8 @@ export const getChatCompletion = async (
     const modelmapping: Partial<Record<ModelOptions, string>> = {
       'gpt-3.5-turbo': 'gpt-35-turbo',
       'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
-      'gpt-3.5-turbo-1106': 'gpt-35-turbo-1106',
-      'gpt-3.5-turbo-0125': 'gpt-35-turbo-0125',
+      // 'gpt-3.5-turbo-1106': 'gpt-35-turbo-1106',
+      // 'gpt-3.5-turbo-0125': 'gpt-35-turbo-0125',
     };
 
     const model = modelmapping[config.model] || config.model;

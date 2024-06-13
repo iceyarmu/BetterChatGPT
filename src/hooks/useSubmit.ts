@@ -194,10 +194,10 @@ const useSubmit = () => {
         // update tokens used for generating title
         if (countTotalTokens) {
           const model = 'gpt-3.5-turbo';
-          updateTotalTokenUsed(model, [message], {
+          updateTotalTokenUsed(model, [message, {
             role: 'assistant',
             content: title,
-          });
+          }]);
         }
       }
     } catch (e: unknown) {
