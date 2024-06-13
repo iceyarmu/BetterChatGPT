@@ -109,3 +109,8 @@ export const migrateV8 = (persistedState: LocalStorageInterfaceV7oV8) => {
   persistedState.theme = 'light';
   persistedState.autoTitle = true;
 };
+
+export const migrateV10 = (persistedState: LocalStorageInterfaceV7oV8) => {
+  persistedState.defaultChatConfig.model = 'gpt-4o';
+  persistedState.defaultChatConfig.max_tokens = 4096;
+};

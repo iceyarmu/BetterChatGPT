@@ -1,6 +1,7 @@
 import { ShareGPTSubmitBodyInterface } from '@type/api';
 import { ConfigInterface, MessageInterface } from '@type/chat';
 import { isAzureEndpoint } from '@utils/api';
+import { ModelOptions } from '@type/chat';
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -75,6 +76,12 @@ export const getChatCompletionStream = async (
       }
       endpoint += path;
     }
+  }
+
+  //save money
+  const modle = config.model.toString();
+  if (modle.indexOf('preview') > -1) {
+    config.model = 'gpt-3.5-turbo';
   }
 
   const response = await fetch(endpoint, {

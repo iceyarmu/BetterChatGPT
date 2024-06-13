@@ -26,6 +26,7 @@ import {
   migrateV6,
   migrateV7,
   migrateV8,
+  migrateV10,
 } from './migrate';
 
 export type StoreState = ChatSlice &
@@ -75,7 +76,7 @@ const useStore = create<StoreState>()(
     {
       name: 'free-chat-gpt',
       partialize: (state) => createPartializedState(state),
-      version: 9,
+      version: 11,
       migrate: (persistedState, version) => {
         switch (version) {
           case 0:
@@ -96,6 +97,9 @@ const useStore = create<StoreState>()(
             migrateV7(persistedState as LocalStorageInterfaceV7oV8);
           case 8:
             migrateV8(persistedState as LocalStorageInterfaceV7oV8);
+          case 9:
+          case 10:
+            migrateV10(persistedState as LocalStorageInterfaceV7oV8);
             break;
         }
         return persistedState as StoreState;
