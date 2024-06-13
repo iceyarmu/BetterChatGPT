@@ -47,28 +47,28 @@ export const modelMaxToken = {
 
 export const modelCost = {
   'gpt-3.5-turbo': {
-    prompt: { price: 0.001, unit: 1000 },
-    completion: { price: 0.002, unit: 1000 },
+    prompt: { price: 0.0005, unit: 1000 },
+    completion: { price: 0.0015, unit: 1000 },
   },
   'gpt-3.5-turbo-0301': {
-    prompt: { price: 0.001, unit: 1000 },
+    prompt: { price: 0.0015, unit: 1000 },
     completion: { price: 0.002, unit: 1000 },
   },
   'gpt-3.5-turbo-0613': {
-    prompt: { price: 0.001, unit: 1000 },
+    prompt: { price: 0.0015, unit: 1000 },
     completion: { price: 0.002, unit: 1000 },
   },
   'gpt-3.5-turbo-16k': {
-    prompt: { price: 0.001, unit: 1000 },
-    completion: { price: 0.002, unit: 1000 },
+    prompt: { price: 0.0005, unit: 1000 },
+    completion: { price: 0.0015, unit: 1000 },
   },
   'gpt-3.5-turbo-16k-0613': {
-    prompt: { price: 0.001, unit: 1000 },
-    completion: { price: 0.002, unit: 1000 },
+    prompt: { price: 0.003, unit: 1000 },
+    completion: { price: 0.004, unit: 1000 },
   },
   'gpt-3.5-turbo-1106': {
     prompt: { price: 0.001, unit: 1000 },
-    completion: { price: 0.0015, unit: 1000 },
+    completion: { price: 0.002, unit: 1000 },
   },
   'gpt-3.5-turbo-0125': {
     prompt: { price: 0.0005, unit: 1000 },
