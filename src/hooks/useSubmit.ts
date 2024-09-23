@@ -24,7 +24,7 @@ const useSubmit = () => {
   ): Promise<string> => {
     let data;
     let config = {..._defaultChatConfig};
-    config.model = 'gpt-3.5-turbo';
+    config.model = 'gpt-4o-mini';
     if (!apiKey || apiKey.length === 0) {
       // official endpoint
       // if (apiEndpoint === officialAPIEndpoint) {
@@ -193,7 +193,7 @@ const useSubmit = () => {
 
         // update tokens used for generating title
         if (countTotalTokens) {
-          const model = 'gpt-3.5-turbo';
+          const model = 'gpt-4o-mini';
           updateTotalTokenUsed(model, [message, {
             role: 'assistant',
             content: title,

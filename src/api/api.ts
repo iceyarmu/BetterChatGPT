@@ -99,7 +99,7 @@ export const getChatCompletionStream = async (
   //save money
   const modle = config.model.toString();
   if (modle.indexOf('preview') > -1) {
-    config.model = 'gpt-3.5-turbo';
+    config.model = 'gpt-4o-mini';
   }
 
   //ollama
