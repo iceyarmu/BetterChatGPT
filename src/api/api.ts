@@ -102,11 +102,6 @@ export const getChatCompletionStream = async (
     config.model = 'gpt-4o-mini';
   }
 
-  //ollama
-  if (modle.indexOf(':') > -1) {
-    endpoint = '/ollama/chat/completions'
-  }
-
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,

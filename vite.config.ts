@@ -10,6 +10,10 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5174
   },
+  preview: {
+    host: '0.0.0.0',
+    port: 5174
+  },
   resolve: {
     alias: {
       '@icon/': new URL('./src/assets/icons/', import.meta.url).pathname,
