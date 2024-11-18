@@ -20,7 +20,7 @@ export const modelOptions: ModelOptions[] = [
   'gpt-4-turbo',
   'gpt-4o',
   'gpt-4o-mini',
-  'qwen2.5:72b',
+  'qwen2.5-coder:32b',
 ];
 
 export const defaultModel = 'gpt-4o';
@@ -46,7 +46,7 @@ export const modelMaxToken = {
   'gpt-4o': 128000,
   'gpt-4o-2024-05-13': 128000,
   'gpt-4o-mini': 16384,
-  'qwen2.5:72b': 32768,
+  'qwen2.5-coder:32b': 32768,
 };
 
 export const modelCost = {
@@ -130,7 +130,7 @@ export const modelCost = {
     prompt: { price: 0.00015, unit: 1000 },
     completion: { price: 0.0006, unit: 1000 },
   },
-  'qwen2.5:72b': {
+  'qwen2.5-coder:32b': {
     prompt: { price: 0.000, unit: 1000 },
     completion: { price: 0.000, unit: 1000 },
   },
