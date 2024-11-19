@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { shallow } from 'zustand/shallow';
 import useStore from '@store/store';
@@ -30,6 +30,7 @@ const ChatTitle = React.memo(() => {
     updatedChats[currentChatIndex].config = config;
     setChats(updatedChats);
   };
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   // for migrating from old ChatInterface to new ChatInterface (with config)
   useEffect(() => {
@@ -39,11 +40,21 @@ const ChatTitle = React.memo(() => {
       updatedChats[currentChatIndex].config = { ..._defaultChatConfig };
       setChats(updatedChats);
     }
+    function handleClickOutside(event: any) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropDown(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [currentChatIndex]);
 
   return config ? (
     <>
       <div
+        ref={dropdownRef}
         className='flex gap-x-4 gap-y-1 flex-wrap w-full items-center justify-center border-b border-black/10 bg-gray-50 p-3 dark:border-gray-900/50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 cursor-pointer'>
         <div className='text-center p-1 rounded-md bg-gray-300/20 dark:bg-gray-900/10 hover:bg-gray-300/50 dark:hover:bg-gray-900/50'
         onClick={() => {
@@ -54,7 +65,7 @@ const ChatTitle = React.memo(() => {
             id='dropdown'
             className={`${
               dropDown ? '' : 'hidden'
-            } absolute top-100 bottom-100 mt-1 z-10 bg-white rounded-lg shadow-xl border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800 opacity-90`}
+            } absolute top-100 bottom-100 mt-1 z-10 bg-white rounded-lg shadow-xl border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800 opacity-95`}
           >
             <ul
               className='text-sm text-gray-700 dark:text-gray-200 p-0 m-0'
