@@ -22,6 +22,7 @@ const ChatTitle = React.memo(() => {
   const currentChatIndex = useStore((state) => state.currentChatIndex);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dropDown, setDropDown] = useState<boolean>(false);
+  const setDefaultChatConfig = useStore((state) => state.setDefaultChatConfig);
 
   const setConfig = (config: ConfigInterface) => {
     const updatedChats: ChatInterface[] = JSON.parse(
@@ -29,6 +30,7 @@ const ChatTitle = React.memo(() => {
     );
     updatedChats[currentChatIndex].config = config;
     setChats(updatedChats);
+    setDefaultChatConfig(config);
   };
   const dropdownRef = useRef<HTMLDivElement>(null);
 
