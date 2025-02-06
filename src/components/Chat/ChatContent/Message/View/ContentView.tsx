@@ -33,6 +33,12 @@ import MarkdownModeButton from './Button/MarkdownModeButton';
 
 import CodeBlock from '../CodeBlock';
 
+const transformContent = (text: string): string => {
+  return text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
+      return content.replace(/\n/g, '\n>');
+  });
+};
+
 const ContentView = memo(
   ({
     role,
@@ -129,10 +135,12 @@ const ContentView = memo(
                 p,
               }}
             >
-              {content}
+              {transformContent(content)}
             </ReactMarkdown>
           ) : (
-            <span className='whitespace-pre-wrap'>{content}</span>
+            <span className='whitespace-pre-wrap'>
+              {transformContent(content)}
+            </span>
           )}
         </div>
         <div className='flex justify-end gap-2 w-full mt-2'>

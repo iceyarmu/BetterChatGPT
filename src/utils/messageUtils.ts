@@ -16,6 +16,13 @@ const encoder = new Tiktoken(
   cl100k_base.pat_str
 );
 
+const removeThinkTags = (message: MessageInterface): MessageInterface => {
+  return {
+    ...message,
+    content: message.content.replace(/<think>.*?<\/think>/gs, '')
+  };
+};
+
 // https://github.com/dqbd/tiktoken/issues/23#issuecomment-1483317174
 export const getChatGPTEncoding = (
   messages: MessageInterface[],
@@ -41,7 +48,8 @@ export const getChatGPTEncoding = (
 
 const countTokens = (messages: MessageInterface[], model: ModelOptions) => {
   if (messages.length === 0) return 0;
-  return getChatGPTEncoding(messages, model).length;
+  const messagesWithoutThink = messages.map(message => removeThinkTags(message));
+  return getChatGPTEncoding(messagesWithoutThink, model).length;
 }
 
 export const countCurrentTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
@@ -116,18 +124,18 @@ export const limitMessageTokens = (
     if (count + tokenCount > limit - 250 || messageCount > maxMessages) break;
     tokenCount += count;
     messageCount++;
-    limitedMessages.unshift({ ...messages[i] });
+    limitedMessages.unshift(removeThinkTags(messages[i]));
   }
 
   // Process first message
   if (retainSystemMessage) {
     // Insert the system message in the third position from the end
-    limitedMessages.splice(-3, 0, { ...messages[0] });
+    limitedMessages.splice(-3, 0, removeThinkTags(messages[0]));
   } else if (!isSystemFirstMessage) {
     // Check if the first message (non-system) can fit within the limit
     const firstMessageTokenCount = countTokens([messages[0]], model);
     if (firstMessageTokenCount + tokenCount < limit) {
-      limitedMessages.unshift({ ...messages[0] });
+      limitedMessages.unshift(removeThinkTags(messages[0]));
     }
   }
 
