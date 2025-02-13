@@ -29,7 +29,7 @@ const Message = React.memo(
     reasoning?: string;
   }) => {
     const hideSideMenu = useStore((state) => state.hideSideMenu);
-    const advancedMode = useStore((state) => state.advancedMode);
+    const advancedMode = false;//useStore((state) => state.advancedMode);
 
     return (
       <div

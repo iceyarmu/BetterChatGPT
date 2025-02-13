@@ -32,7 +32,7 @@ const ChatContent = () => {
       ? state.chats[state.currentChatIndex].messages.length
       : 0
   );
-  const advancedMode = useStore((state) => state.advancedMode);
+  const advancedMode = false;//useStore((state) => state.advancedMode);
   const generating = useStore.getState().generating;
   const hideSideMenu = useStore((state) => state.hideSideMenu);
 
@@ -59,7 +59,7 @@ const ChatContent = () => {
             className='flex flex-col items-center text-sm dark:bg-gray-800 w-full'
             ref={saveRef}
           >
-            {advancedMode && <ChatTitle />}
+            <ChatTitle />
             {!generating && advancedMode && messages?.length === 0 && (
               <NewMessageButton messageIndex={-1} />
             )}

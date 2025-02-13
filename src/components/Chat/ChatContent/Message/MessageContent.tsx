@@ -18,7 +18,7 @@ const MessageContent = ({
   reasoning?: string;
 }) => {
   const [isEdit, setIsEdit] = useState<boolean>(sticky);
-  const advancedMode = useStore((state) => state.advancedMode);
+  const advancedMode = false;//useStore((state) => state.advancedMode);
 
   return (
     <div className='relative flex flex-col gap-2 md:gap-3 lg:w-[calc(100%-115px)]'>

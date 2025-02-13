@@ -178,7 +178,7 @@ const EditViewButtons = memo(
   }) => {
     const { t } = useTranslation();
     const generating = useStore.getState().generating;
-    const advancedMode = useStore((state) => state.advancedMode);
+    const advancedMode = false;//useStore((state) => state.advancedMode);
 
     return (
       <div className='flex'>
