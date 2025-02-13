@@ -18,14 +18,14 @@ export const modelOptions: ModelOptions[] = [
   // 'gpt-3.5-turbo-16k',
   // 'gpt-4',
   // 'gpt-4-turbo',
+  // 'qwen2.5-coder:32b',
+  // 'claude-3-5-haiku',
+  // 'deepseek-v3'
   'gpt-4o',
   'gpt-4o-mini',
   'o3-mini',
-  'qwen2.5-coder:32b',
   'claude-3-5-sonnet',
-  'claude-3-5-haiku',
   'deepseek-r1',
-  'deepseek-v3'
 ];
 
 export const defaultModel = 'gpt-4o';
@@ -49,14 +49,14 @@ export const modelMaxToken = {
   // 'gpt-4-turbo': 128000,
   // 'gpt-4-turbo-2024-04-09': 128000,
   // 'gpt-4o-2024-05-13': 128000,
+  // 'qwen2.5-coder:32b': 32768,
+  // 'claude-3-5-haiku': 200000,
+  // 'deepseek-v3': 65536,
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
-  'qwen2.5-coder:32b': 32768,
-  'claude-3-5-sonnet': 200000,
-  'claude-3-5-haiku': 200000,
-  'deepseek-r1': 128000,
-  'deepseek-v3': 65536,
   'o3-mini': 200000,
+  'claude-3-5-sonnet': 200000,
+  'deepseek-r1': 128000,
 };
 
 export const modelCost = {
@@ -132,6 +132,18 @@ export const modelCost = {
   //   prompt: { price: 0.005, unit: 1000 },
   //   completion: { price: 0.015, unit: 1000 },
   // },
+  // 'qwen2.5-coder:32b': {
+  //   prompt: { price: 0.07, unit: 1000000 },
+  //   completion: { price: 0.16, unit: 1000000 },
+  // },
+  // 'claude-3-5-haiku': {
+  //   prompt: { price: 0.08, unit: 1000000 },
+  //   completion: { price: 4.00, unit: 1000000 },
+  // },
+  // 'deepseek-v3': {
+  //   prompt: { price: 0.49, unit: 1000000 },
+  //   completion: { price: 0.89, unit: 1000 },
+  // },
   'gpt-4o': {
     prompt: { price: 2.50, unit: 1000000 },
     completion: { price: 10.00, unit: 1000000 },
@@ -140,29 +152,17 @@ export const modelCost = {
     prompt: { price: 0.15, unit: 1000000 },
     completion: { price: 0.60, unit: 1000000 },
   },
-  'qwen2.5-coder:32b': {
-    prompt: { price: 0.07, unit: 1000000 },
-    completion: { price: 0.16, unit: 1000000 },
+  'o3-mini': {
+    prompt: { price: 1.10, unit: 1000000 },
+    completion: { price: 4.40, unit: 1000000 },
   },
   'claude-3-5-sonnet': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
   },
-  'claude-3-5-haiku': {
-    prompt: { price: 0.08, unit: 1000000 },
-    completion: { price: 4.00, unit: 1000000 },
-  },
   'deepseek-r1': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 8.00, unit: 1000000 },
-  },
-  'deepseek-v3': {
-    prompt: { price: 0.49, unit: 1000000 },
-    completion: { price: 0.89, unit: 1000 },
-  },
-  'o3-mini': {
-    prompt: { price: 1.10, unit: 1000000 },
-    completion: { price: 4.40, unit: 1000000 },
   },
 };
 
