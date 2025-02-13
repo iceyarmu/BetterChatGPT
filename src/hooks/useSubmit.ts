@@ -6,14 +6,14 @@ import { getChatCompletion, getChatCompletionStream } from '@api/api';
 import { parseEventSource } from '@api/helper';
 import { limitMessageTokens, updateTotalTokenUsed } from '@utils/messageUtils';
 import { _defaultChatConfig } from '@constants/chat';
-import { officialAPIEndpoint, defaultAPIEndpoint } from '@constants/auth';
+import { officialAPIEndpoint, defaultAPIEndpoint, defaultAPIKey } from '@constants/auth';
 
 const useSubmit = () => {
   const { t, i18n } = useTranslation('api');
   const error = useStore((state) => state.error);
   const setError = useStore((state) => state.setError);
-  const apiEndpoint = useStore((state) => state.apiEndpoint);
-  const apiKey = useStore((state) => state.apiKey);
+  const apiEndpoint = defaultAPIEndpoint;
+  const apiKey = defaultAPIKey;
   const setGenerating = useStore((state) => state.setGenerating);
   const generating = useStore((state) => state.generating);
   const currentChatIndex = useStore((state) => state.currentChatIndex);
@@ -33,14 +33,14 @@ const useSubmit = () => {
 
       // other endpoints
       data = await getChatCompletion(
-        defaultAPIEndpoint,
+        apiEndpoint,
         message,
         config
       );
     } else if (apiKey) {
       // own apikey
       data = await getChatCompletion(
-        defaultAPIEndpoint,
+        apiEndpoint,
         message,
         config,
         apiKey
@@ -84,14 +84,14 @@ const useSubmit = () => {
 
         // other endpoints
         stream = await getChatCompletionStream(
-          defaultAPIEndpoint,
+          apiEndpoint,
           messages,
           chats[currentChatIndex].config
         );
       } else if (apiKey) {
         // own apikey
         stream = await getChatCompletionStream(
-          defaultAPIEndpoint,
+          apiEndpoint,
           messages,
           chats[currentChatIndex].config,
           apiKey
