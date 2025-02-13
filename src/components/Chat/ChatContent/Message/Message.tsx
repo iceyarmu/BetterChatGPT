@@ -20,11 +20,13 @@ const Message = React.memo(
     content,
     messageIndex,
     sticky = false,
+    reasoning,
   }: {
     role: Role;
     content: string;
     messageIndex: number;
     sticky?: boolean;
+    reasoning?: string;
   }) => {
     const hideSideMenu = useStore((state) => state.hideSideMenu);
     const advancedMode = useStore((state) => state.advancedMode);
@@ -55,6 +57,7 @@ const Message = React.memo(
               content={content}
               messageIndex={messageIndex}
               sticky={sticky}
+              reasoning={reasoning}
             />
           </div>
         </div>

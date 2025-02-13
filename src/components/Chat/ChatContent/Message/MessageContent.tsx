@@ -9,11 +9,13 @@ const MessageContent = ({
   content,
   messageIndex,
   sticky = false,
+  reasoning,
 }: {
   role: string;
   content: string;
   messageIndex: number;
   sticky?: boolean;
+  reasoning?: string;
 }) => {
   const [isEdit, setIsEdit] = useState<boolean>(sticky);
   const advancedMode = useStore((state) => state.advancedMode);
@@ -34,6 +36,7 @@ const MessageContent = ({
           content={content}
           setIsEdit={setIsEdit}
           messageIndex={messageIndex}
+          reasoning={reasoning}
         />
       )}
     </div>

@@ -110,6 +110,7 @@ export const getChatCompletionStream = async (
       ...config,
       max_tokens: undefined,
       stream: true,
+      include_reasoning: true
     }),
   });
   if (response.status === 404 || response.status === 405) {

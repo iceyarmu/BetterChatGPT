@@ -69,6 +69,7 @@ const ChatContent = () => {
                   <Message
                     role={message.role}
                     content={message.content}
+                    reasoning={message.reasoning}
                     messageIndex={index}
                   />
                   {!generating && advancedMode && <NewMessageButton messageIndex={index} />}

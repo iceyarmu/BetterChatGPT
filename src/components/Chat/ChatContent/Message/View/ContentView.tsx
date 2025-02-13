@@ -33,8 +33,8 @@ import MarkdownModeButton from './Button/MarkdownModeButton';
 
 import CodeBlock from '../CodeBlock';
 
-const transformContent = (text: string): string => {
-  return text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
+const transformContent = (text: string, reasoning?: string): string => {
+  return (reasoning?.replace(/\n/g, '\n>')||'') + text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
       return content.replace(/\n/g, '\n>');
   });
 };
@@ -45,11 +45,13 @@ const ContentView = memo(
     content,
     setIsEdit,
     messageIndex,
+    reasoning,
   }: {
     role: string;
     content: string;
     setIsEdit: React.Dispatch<React.SetStateAction<boolean>>;
     messageIndex: number;
+    reasoning?: string;
   }) => {
     const { handleSubmit } = useSubmit();
 
@@ -135,11 +137,11 @@ const ContentView = memo(
                 p,
               }}
             >
-              {transformContent(content)}
+              {transformContent(content, reasoning)}
             </ReactMarkdown>
           ) : (
             <span className='whitespace-pre-wrap'>
-              {transformContent(content)}
+              {transformContent(content, reasoning)}
             </span>
           )}
         </div>

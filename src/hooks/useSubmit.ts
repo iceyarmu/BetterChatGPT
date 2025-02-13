@@ -116,21 +116,30 @@ const useSubmit = () => {
           if (result === '[DONE]' || done) {
             reading = false;
           } else {
-            const resultString = result.reduce((output: string, curr) => {
+            const resultString = result.reduce((output: string[], curr) => {
               if (typeof curr === 'string') {
                 partial += curr;
               } else {
                 const content = curr.choices[0]?.delta?.content ?? null;
-                if (content) output += content;
+                if (content) output[0] += content;
+                const reasoningContent = curr.choices[0]?.delta?.reasoning ?? null;
+                if (reasoningContent) output[1] += reasoningContent;
               }
               return output;
-            }, '');
+            }, ['', '']);
 
             const updatedChats: ChatInterface[] = JSON.parse(
               JSON.stringify(useStore.getState().chats)
             );
             const updatedMessages = updatedChats[currentChatIndex].messages;
-            updatedMessages[updatedMessages.length - 1].content += resultString;
+            const message = updatedMessages[updatedMessages.length - 1];
+            message.content += resultString[0];
+            if (resultString[1]) {
+              if (!message.reasoning) {
+                message.reasoning = '';
+              }
+              message.reasoning += resultString[1];
+            }
             setChats(updatedChats);
           }
         }
@@ -202,7 +211,7 @@ const useSubmit = () => {
       }
     } catch (e: unknown) {
       const err = (e as Error).message;
-      console.log(err);
+      console.log(err, (e as Error).stack);
       setError(err);
     }
     setGenerating(false);
