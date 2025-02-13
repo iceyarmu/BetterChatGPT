@@ -13,6 +13,7 @@ export interface EventSourceDataChoices {
     content?: string;
     role?: string;
     reasoning?: string;
+    reasoning_content?: string;
   };
   finish_reason?: string;
   index: number;

@@ -120,10 +120,11 @@ const useSubmit = () => {
               if (typeof curr === 'string') {
                 partial += curr;
               } else {
-                const content = curr.choices[0]?.delta?.content ?? null;
+                const delta = curr.choices[0]?.delta ?? null;
+                const content = delta?.content ?? null;
                 if (content) output[0] += content;
-                const reasoningContent = curr.choices[0]?.delta?.reasoning ?? null;
-                if (reasoningContent) output[1] += reasoningContent;
+                const reasoning = delta?.reasoning ?? delta?.reasoning_content ?? null;
+                if (reasoning) output[1] += reasoning;
               }
               return output;
             }, ['', '']);
