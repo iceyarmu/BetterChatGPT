@@ -26,3 +26,6 @@ dist-ssr
 release/
 
 .env
+yarn.lock
+package-lock.json
+.htpasswd
