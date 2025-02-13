@@ -3,7 +3,7 @@ import useStore from '@store/store';
 import { shallow } from 'zustand/shallow';
 
 import { countCurrentTokens, countTotalTokens } from '@utils/messageUtils';
-import { modelCost } from '@constants/chat';
+import { defaultModel, modelCost } from '@constants/chat';
 
 const TokenCount = React.memo(() => {
   const [tokenCount, setTokenCount] = useState<number[][]>([[0,0],[0,0]]);
@@ -17,7 +17,7 @@ const TokenCount = React.memo(() => {
   const model = useStore((state) =>
     state.chats
       ? state.chats[state.currentChatIndex].config.model
-      : 'gpt-4o-mini'
+      : defaultModel
   );
 
   const cost = useMemo(() => {

@@ -29,7 +29,7 @@ export const getChatGPTEncoding = (
   messages: MessageInterface[],
   model: ModelOptions
 ) => {
-  const isGpt3 = model === 'gpt-3.5-turbo' || model === 'gpt-3.5-turbo-16k';
+  const isGpt3 = false;//model === 'gpt-3.5-turbo' || model === 'gpt-3.5-turbo-16k';
 
   const msgSep = isGpt3 ? '\n' : '';
   const roleSep = isGpt3 ? '\n' : '<|im_sep|>';

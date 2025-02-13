@@ -15,33 +15,33 @@ export const getChatCompletion = async (
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  if (isAzureEndpoint(endpoint) && apiKey) {
-    headers['api-key'] = apiKey;
+  // if (isAzureEndpoint(endpoint) && apiKey) {
+  //   headers['api-key'] = apiKey;
 
-    const modelmapping: Partial<Record<ModelOptions, string>> = {
-      'gpt-3.5-turbo': 'gpt-35-turbo',
-      'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
-      // 'gpt-3.5-turbo-1106': 'gpt-35-turbo-1106',
-      // 'gpt-3.5-turbo-0125': 'gpt-35-turbo-0125',
-    };
+  //   const modelmapping: Partial<Record<ModelOptions, string>> = {
+  //     'gpt-3.5-turbo': 'gpt-35-turbo',
+  //     'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
+  //     // 'gpt-3.5-turbo-1106': 'gpt-35-turbo-1106',
+  //     // 'gpt-3.5-turbo-0125': 'gpt-35-turbo-0125',
+  //   };
 
-    const model = modelmapping[config.model] || config.model;
+  //   const model = modelmapping[config.model] || config.model;
 
-    // set api version to 2023-07-01-preview for gpt-4 and gpt-4-32k, otherwise use 2023-03-15-preview
-    const apiVersion =
-      model === 'gpt-4' || model === 'gpt-4-32k'
-        ? '2023-07-01-preview'
-        : '2023-03-15-preview';
+  //   // set api version to 2023-07-01-preview for gpt-4 and gpt-4-32k, otherwise use 2023-03-15-preview
+  //   const apiVersion =
+  //     model === 'gpt-4' || model === 'gpt-4-32k'
+  //       ? '2023-07-01-preview'
+  //       : '2023-03-15-preview';
 
-    const path = `openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
+  //   const path = `openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
 
-    if (!endpoint.endsWith(path)) {
-      if (!endpoint.endsWith('/')) {
-        endpoint += '/';
-      }
-      endpoint += path;
-    }
-  }
+  //   if (!endpoint.endsWith(path)) {
+  //     if (!endpoint.endsWith('/')) {
+  //       endpoint += '/';
+  //     }
+  //     endpoint += path;
+  //   }
+  // }
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -71,36 +71,36 @@ export const getChatCompletionStream = async (
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  if (isAzureEndpoint(endpoint) && apiKey) {
-    headers['api-key'] = apiKey;
+  // if (isAzureEndpoint(endpoint) && apiKey) {
+  //   headers['api-key'] = apiKey;
 
-    const modelmapping: Partial<Record<ModelOptions, string>> = {
-      'gpt-3.5-turbo': 'gpt-35-turbo',
-      'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
-    };
+  //   const modelmapping: Partial<Record<ModelOptions, string>> = {
+  //     'gpt-3.5-turbo': 'gpt-35-turbo',
+  //     'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
+  //   };
 
-    const model = modelmapping[config.model] || config.model;
+  //   const model = modelmapping[config.model] || config.model;
 
-    // set api version to 2023-07-01-preview for gpt-4 and gpt-4-32k, otherwise use 2023-03-15-preview
-    const apiVersion =
-      model === 'gpt-4' || model === 'gpt-4-32k'
-        ? '2023-07-01-preview'
-        : '2023-03-15-preview';
-    const path = `openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
+  //   // set api version to 2023-07-01-preview for gpt-4 and gpt-4-32k, otherwise use 2023-03-15-preview
+  //   const apiVersion =
+  //     model === 'gpt-4' || model === 'gpt-4-32k'
+  //       ? '2023-07-01-preview'
+  //       : '2023-03-15-preview';
+  //   const path = `openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
 
-    if (!endpoint.endsWith(path)) {
-      if (!endpoint.endsWith('/')) {
-        endpoint += '/';
-      }
-      endpoint += path;
-    }
-  }
+  //   if (!endpoint.endsWith(path)) {
+  //     if (!endpoint.endsWith('/')) {
+  //       endpoint += '/';
+  //     }
+  //     endpoint += path;
+  //   }
+  // }
 
   //save money
-  const modle = config.model.toString();
-  if (modle.indexOf('preview') > -1) {
-    config.model = 'gpt-4o-mini';
-  }
+  // const modle = config.model.toString();
+  // if (modle.indexOf('preview') > -1) {
+  //   config.model = 'gpt-4o-mini';
+  // }
   const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
 
   const response = await fetch(endpoint, {

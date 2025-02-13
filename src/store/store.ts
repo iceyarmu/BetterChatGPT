@@ -27,6 +27,7 @@ import {
   migrateV7,
   migrateV8,
   migrateV10,
+  fix11,
 } from './migrate';
 
 export type StoreState = ChatSlice &
@@ -103,6 +104,13 @@ const useStore = create<StoreState>()(
             break;
         }
         return persistedState as StoreState;
+      },
+      onRehydrateStorage: (state) => {
+        return (persistedState) => {
+          if (persistedState) {
+            fix11(persistedState);
+          }
+        };
       },
     }
   )

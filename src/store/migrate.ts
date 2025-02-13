@@ -16,9 +16,11 @@ import {
   _defaultChatConfig,
   defaultModel,
   defaultUserMaxToken,
+  modelOptions,
 } from '@constants/chat';
 import { officialAPIEndpoint } from '@constants/auth';
 import defaultPrompts from '@constants/prompt';
+import { StoreState } from './store';
 
 export const migrateV0 = (persistedState: LocalStorageInterfaceV0ToV1) => {
   persistedState.chats.forEach((chat) => {
@@ -111,6 +113,23 @@ export const migrateV8 = (persistedState: LocalStorageInterfaceV7oV8) => {
 };
 
 export const migrateV10 = (persistedState: LocalStorageInterfaceV7oV8) => {
-  persistedState.defaultChatConfig.model = 'gpt-4o';
+  persistedState.defaultChatConfig.model = defaultModel;
   persistedState.defaultChatConfig.max_tokens = 4096;
 };
+
+export const fix11 = (persistedState: StoreState) => {
+  if (!persistedState.defaultChatConfig.model) {
+    persistedState.defaultChatConfig.model = defaultModel;
+  } else if (modelOptions.indexOf(persistedState.defaultChatConfig.model) === -1) {
+    persistedState.defaultChatConfig.model = defaultModel;
+  }
+  if (persistedState.chats) {
+    for (const chat of persistedState.chats) {
+      if (!chat.config.model) {
+        chat.config.model = defaultModel;
+      } else if (modelOptions.indexOf(chat.config.model) === -1) {
+        chat.config.model = defaultModel;
+      }
+    }
+  }
+}
