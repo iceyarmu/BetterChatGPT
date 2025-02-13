@@ -102,6 +102,7 @@ export const getChatCompletionStream = async (
   //   config.model = 'gpt-4o-mini';
   // }
   const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
+  const reasoning_effort = config.model === 'o3-mini' ? 'high' : undefined;
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -111,7 +112,8 @@ export const getChatCompletionStream = async (
       ...config,
       max_tokens: undefined,
       stream: true,
-      include_reasoning
+      include_reasoning,
+      reasoning_effort,
     }),
   });
   if (response.status === 404 || response.status === 405) {
