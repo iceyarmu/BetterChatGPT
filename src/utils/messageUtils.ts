@@ -19,7 +19,8 @@ const encoder = new Tiktoken(
 const removeThinkTags = (message: MessageInterface): MessageInterface => {
   return {
     ...message,
-    content: message.content.replace(/<think>.*?<\/think>/gs, '')
+    content: message.content.replace(/<think>.*?<\/think>/gs, ''),
+    reasoning: undefined,
   };
 };
 

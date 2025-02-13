@@ -34,9 +34,18 @@ import MarkdownModeButton from './Button/MarkdownModeButton';
 import CodeBlock from '../CodeBlock';
 
 const transformContent = (text: string, reasoning?: string): string => {
-  return (reasoning?.replace(/\n/g, '\n>')||'') + text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
+  if (reasoning && reasoning.trim() !== '') {
+    reasoning = "\n" + reasoning.trim();
+    reasoning = reasoning.replace(/\n/g, '\n>');
+  } else {
+    reasoning = '';
+  }
+  if (text && text.indexOf('<think>') !== -1) {
+    text = text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
       return content.replace(/\n/g, '\n>');
-  });
+    });
+  }
+  return reasoning + text;
 };
 
 const ContentView = memo(
