@@ -65,7 +65,7 @@ export type ModelOptions =
   // 'qwen2.5-coder:32b' |
   'gpt-4o' |
   'gpt-4o-mini' |
-  'o3-mini' |
+  'o3-mini-high' |
   'claude-3-5-sonnet' |
   'deepseek-r1'
   ;

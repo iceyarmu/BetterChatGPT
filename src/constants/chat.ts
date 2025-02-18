@@ -23,7 +23,7 @@ export const modelOptions: ModelOptions[] = [
   // 'deepseek-v3'
   'gpt-4o',
   'gpt-4o-mini',
-  'o3-mini',
+  'o3-mini-high',
   'claude-3-5-sonnet',
   'deepseek-r1',
 ];
@@ -54,7 +54,7 @@ export const modelMaxToken = {
   // 'deepseek-v3': 65536,
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
-  'o3-mini': 200000,
+  'o3-mini-high': 200000,
   'claude-3-5-sonnet': 200000,
   'deepseek-r1': 128000,
 };
@@ -152,7 +152,7 @@ export const modelCost = {
     prompt: { price: 0.15, unit: 1000000 },
     completion: { price: 0.60, unit: 1000000 },
   },
-  'o3-mini': {
+  'o3-mini-high': {
     prompt: { price: 1.10, unit: 1000000 },
     completion: { price: 4.40, unit: 1000000 },
   },
