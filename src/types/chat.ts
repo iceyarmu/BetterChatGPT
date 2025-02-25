@@ -66,7 +66,7 @@ export type ModelOptions =
   'gpt-4o' |
   'gpt-4o-mini' |
   'o3-mini-high' |
-  'claude-3-5-sonnet' |
+  'claude-3-7-sonnet' |
   'deepseek-r1'
   ;
 
