@@ -25,6 +25,7 @@ export const modelOptions: ModelOptions[] = [
   'gpt-4o-mini',
   'o3-mini-high',
   'claude-3-7-sonnet',
+  'claude-3-7-sonnet-thinking',
   'deepseek-r1',
 ];
 
@@ -56,6 +57,7 @@ export const modelMaxToken = {
   'gpt-4o-mini': 128000,
   'o3-mini-high': 200000,
   'claude-3-7-sonnet': 200000,
+  'claude-3-7-sonnet-thinking': 200000,
   'deepseek-r1': 128000,
 };
 
@@ -157,6 +159,10 @@ export const modelCost = {
     completion: { price: 4.40, unit: 1000000 },
   },
   'claude-3-7-sonnet': {
+    prompt: { price: 3.00, unit: 1000000 },
+    completion: { price: 15.00, unit: 1000000 },
+  },
+  'claude-3-7-sonnet-thinking': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
   },
