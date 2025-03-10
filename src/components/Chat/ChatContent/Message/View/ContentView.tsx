@@ -3,6 +3,7 @@ import React, {
   HTMLAttributes,
   memo,
   useState,
+  useEffect,
 } from 'react';
 
 import ReactMarkdown from 'react-markdown';
@@ -32,21 +33,7 @@ import DeleteButton from './Button/DeleteButton';
 import MarkdownModeButton from './Button/MarkdownModeButton';
 
 import CodeBlock from '../CodeBlock';
-
-const transformContent = (text: string, reasoning?: string): string => {
-  if (reasoning && reasoning.trim() !== '') {
-    reasoning = "\n" + reasoning.trim();
-    reasoning = reasoning.replace(/\n/g, '\n>');
-  } else {
-    reasoning = '';
-  }
-  if (text && text.indexOf('<think>') !== -1) {
-    text = text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
-      return content.replace(/\n/g, '\n>');
-    });
-  }
-  return reasoning + text;
-};
+import { useTranslation } from 'react-i18next';
 
 const ContentView = memo(
   ({
@@ -63,8 +50,10 @@ const ContentView = memo(
     reasoning?: string;
   }) => {
     const { handleSubmit } = useSubmit();
+    const { t } = useTranslation();
 
     const [isDelete, setIsDelete] = useState<boolean>(false);
+    const [dotCount, setDotCount] = useState<number>(1);
 
     const currentChatIndex = useStore((state) => state.currentChatIndex);
     const setChats = useStore((state) => state.setChats);
@@ -73,6 +62,16 @@ const ContentView = memo(
     );
     const inlineLatex = useStore((state) => state.inlineLatex);
     const markdownMode = useStore((state) => state.markdownMode);
+    const generating = useStore((state) => state.generating);
+    
+    useEffect(() => {
+      if (generating) {
+        const timer = setInterval(() => {
+          setDotCount(prev => prev >= 6 ? 1 : prev + 1);
+        }, 500);
+        return () => clearInterval(timer);
+      }
+    }, [generating]);
 
     const handleDelete = () => {
       const updatedChats: ChatInterface[] = JSON.parse(
@@ -120,6 +119,25 @@ const ContentView = memo(
       navigator.clipboard.writeText(content);
     };
 
+    const transformContent = () => (text: string, reasoning?: string): string => {
+      if (reasoning && reasoning.trim() !== '') {
+        reasoning = "\n" + reasoning.trim();
+        reasoning = reasoning.replace(/\n/g, '\n>');
+      } else {
+        reasoning = '';
+      }
+      if (text && text.indexOf('<think>') !== -1) {
+        text = text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
+          return content.replace(/\n/g, '\n>');
+        });
+      }
+      const result = reasoning + text;
+      if (!result && generating) {
+        return '*' + t('thinking') + '.'.repeat(dotCount) + '*';
+      }
+      return result;
+    };
+
     return (
       <>
         <div className='markdown prose w-full md:max-w-full break-words dark:prose-invert dark share-gpt-message'>
@@ -146,11 +164,11 @@ const ContentView = memo(
                 p,
               }}
             >
-              {transformContent(content, reasoning)}
+              {transformContent()(content, reasoning)}
             </ReactMarkdown>
           ) : (
             <span className='whitespace-pre-wrap'>
-              {transformContent(content, reasoning)}
+              {transformContent()(content, reasoning)}
             </span>
           )}
         </div>
