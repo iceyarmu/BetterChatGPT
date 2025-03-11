@@ -18,7 +18,8 @@ i18n
       loadPath: 'locales/{{lng}}/{{ns}}.json',
     },
     fallbackLng: {
-      default: ['en'],
+      'zh-TW': ['zh-CN'],
+      default: ['en-US'],
     },
     ns: namespace,
     defaultNS: 'main',
