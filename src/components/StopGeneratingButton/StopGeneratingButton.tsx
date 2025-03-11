@@ -1,9 +1,11 @@
 import React from 'react';
 import useStore from '@store/store';
+import { useTranslation } from 'react-i18next';
 
 const StopGeneratingButton = () => {
   const setGenerating = useStore((state) => state.setGenerating);
   const generating = useStore((state) => state.generating);
+  const { t } = useTranslation();
 
   return generating ? (
     <div
@@ -29,7 +31,7 @@ const StopGeneratingButton = () => {
           >
             <rect x='3' y='3' width='18' height='18' rx='2' ry='2'></rect>
           </svg>
-          Stop generating
+          {t('stopGenerating')}
         </div>
       </button>
     </div>

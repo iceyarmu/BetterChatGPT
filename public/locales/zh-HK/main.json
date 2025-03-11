@@ -44,5 +44,6 @@
   "cloned": "建立成功",
   "enterToSubmit": "撳 Enter 鍵送出",
   "submitPlaceholder": "輸入訊息或撳 [/] 以使用提示詞…",
-  "thinking": "思考中"
+  "thinking": "思考中",
+  "stopGenerating": "停止生成"
 }

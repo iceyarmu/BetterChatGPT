@@ -107,9 +107,9 @@ const ChatContent = () => {
             }`}
           >
             {useStore.getState().generating || (
-              <div className='md:w-[calc(100%-50px)] flex gap-4 flex-wrap justify-center'>
+              <div className='md:w-[calc(100%-170px)] flex gap-4 flex-wrap justify-center'>
                 <DownloadChat saveRef={saveRef} />
-                <ShareGPT />
+                {/* <ShareGPT /> */}
                 <CloneChat />
               </div>
             )}
