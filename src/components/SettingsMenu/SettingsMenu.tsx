@@ -42,7 +42,7 @@ const SettingsMenu = () => {
           title={t('setting') as string}
           cancelButton={false}
         >
-          <div className='p-6 border-b border-gray-200 dark:border-gray-600 flex flex-col items-center gap-4'>
+          <div className='p-6 border-b border-gray-200 dark:border-gray-600 flex flex-col items-center gap-4 min-w-[320px]'>
             <LanguageSelector />
             <ThemeSwitcher />
             <div className='flex flex-col gap-3'>
@@ -50,12 +50,12 @@ const SettingsMenu = () => {
               <EnterToSubmitToggle />
               <InlineLatexToggle />
               <AdvancedModeToggle />
-              <TotalTokenCostToggle />
+              {/* <TotalTokenCostToggle /> */}
             </div>
             <ClearConversation />
             <PromptLibraryMenu />
             <ChatConfigMenu />
-            <TotalTokenCost />
+            {/* <TotalTokenCost /> */}
           </div>
         </PopupModal>
       )}
