@@ -68,7 +68,8 @@ export type ModelOptions =
   'o3-mini-high' |
   'claude-3-7-sonnet' |
   'claude-3-7-sonnet-thinking' |
-  'deepseek-r1'
+  'deepseek-r1' |
+  'gemini-2.5-pro'
   ;
 
 export type TotalTokenUsed = {
