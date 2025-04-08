@@ -1,6 +1,9 @@
 #!/bin/sh
 
 currentShellPath=$(cd "$(dirname "$0")"; pwd)
-remotePath="slots-mac:/Users/apple/Software/BetterChatGPT"
-rsync -av "$currentShellPath/src/" "$remotePath/src/"
-rsync -av "$currentShellPath/public/" "$remotePath/public/"
+remoteHost="slots-mac"
+remotePath="/Users/apple/Software/BetterChatGPT"
+rsync -av "$currentShellPath/src/" "$remoteHost:$remotePath/src/"
+rsync -av "$currentShellPath/public/" "$remoteHost:$remotePath/public/"
+echo "Enter password for $remoteHost:"
+ssh -t $remoteHost "cd $remotePath && sudo ./reload.sh"
