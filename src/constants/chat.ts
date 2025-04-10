@@ -28,6 +28,7 @@ export const modelOptions: ModelOptions[] = [
   'claude-3-7-sonnet-thinking',
   'deepseek-r1',
   'gemini-2.5-pro',
+  'grok-3',
 ];
 
 export const defaultModel = 'gpt-4o';
@@ -61,6 +62,7 @@ export const modelMaxToken = {
   'claude-3-7-sonnet-thinking': 200000,
   'deepseek-r1': 128000,
   'gemini-2.5-pro': 1000000,
+  'grok-3': 128000,
 };
 
 export const modelCost = {
@@ -175,6 +177,10 @@ export const modelCost = {
   'gemini-2.5-pro': {
     prompt: { price: 1.25, unit: 1000000 },
     completion: { price: 10.00, unit: 1000000 },
+  },
+  'grok-3': {
+    prompt: { price: 3, unit: 1000000 },
+    completion: { price: 15.00, unit: 1000000 },
   },
 };
 
