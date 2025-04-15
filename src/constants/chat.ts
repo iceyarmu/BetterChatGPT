@@ -13,6 +13,7 @@ const dateString =
 // default system message obtained using the following method: https://twitter.com/DeminDimin/status/1619935545144279040
 export const _defaultSystemMessage = ``;
 
+//这里注册所有可选择的模型列表
 export const modelOptions: ModelOptions[] = [
   // 'gpt-3.5-turbo',
   // 'gpt-3.5-turbo-16k',
@@ -21,9 +22,10 @@ export const modelOptions: ModelOptions[] = [
   // 'qwen2.5-coder:32b',
   // 'claude-3-5-haiku',
   // 'deepseek-v3'
+  // 'gpt-4.1-nano',
+  // 'gpt-4o-mini',
   'gpt-4.1',
   'gpt-4o',
-  'gpt-4o-mini',
   'o3-mini-high',
   'claude-3-7-sonnet',
   'claude-3-7-sonnet-thinking',
@@ -57,6 +59,7 @@ export const modelMaxToken = {
   // 'claude-3-5-haiku': 200000,
   // 'deepseek-v3': 65536,
   'gpt-4.1': 1000000,
+  'gpt-4.1-nano': 1000000,
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
   'o3-mini-high': 200000,
@@ -155,6 +158,10 @@ export const modelCost = {
   'gpt-4.1': {
     prompt: { price: 2, unit: 1000000 },
     completion: { price: 8, unit: 1000000 },
+  },
+  'gpt-4.1-nano': {
+    prompt: { price: 0.1, unit: 1000000 },
+    completion: { price: 0.4, unit: 1000000 },
   },
   'gpt-4o': {
     prompt: { price: 2.50, unit: 1000000 },

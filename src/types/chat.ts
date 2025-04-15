@@ -50,6 +50,7 @@ export interface Folder {
   color?: string;
 }
 
+//这里注册所有可请求的模型列表
 export type ModelOptions =
   // 'gpt-4' |
   // 'gpt-4-32k' |
@@ -64,6 +65,7 @@ export type ModelOptions =
   // 'claude-3-5-haiku' |
   // 'qwen2.5-coder:32b' |
   'gpt-4.1' |
+  'gpt-4.1-nano' |
   'gpt-4o' |
   'gpt-4o-mini' |
   'o3-mini-high' |
