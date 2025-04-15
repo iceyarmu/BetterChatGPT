@@ -21,6 +21,7 @@ export const modelOptions: ModelOptions[] = [
   // 'qwen2.5-coder:32b',
   // 'claude-3-5-haiku',
   // 'deepseek-v3'
+  'gpt-4.1',
   'gpt-4o',
   'gpt-4o-mini',
   'o3-mini-high',
@@ -31,7 +32,7 @@ export const modelOptions: ModelOptions[] = [
   'grok-3',
 ];
 
-export const defaultModel = 'gpt-4o';
+export const defaultModel = 'gpt-4.1';
 
 export const modelMaxToken = {
   // 'gpt-3.5-turbo': 16384,
@@ -55,6 +56,7 @@ export const modelMaxToken = {
   // 'qwen2.5-coder:32b': 32768,
   // 'claude-3-5-haiku': 200000,
   // 'deepseek-v3': 65536,
+  'gpt-4.1': 1000000,
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
   'o3-mini-high': 200000,
@@ -150,6 +152,10 @@ export const modelCost = {
   //   prompt: { price: 0.49, unit: 1000000 },
   //   completion: { price: 0.89, unit: 1000 },
   // },
+  'gpt-4.1': {
+    prompt: { price: 2, unit: 1000000 },
+    completion: { price: 8, unit: 1000000 },
+  },
   'gpt-4o': {
     prompt: { price: 2.50, unit: 1000000 },
     completion: { price: 10.00, unit: 1000000 },
