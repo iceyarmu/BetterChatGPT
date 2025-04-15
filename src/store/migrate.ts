@@ -117,6 +117,13 @@ export const migrateV10 = (persistedState: LocalStorageInterfaceV7oV8) => {
   persistedState.defaultChatConfig.max_tokens = 4096;
 };
 
+export const migrateV11 = (persistedState: LocalStorageInterfaceV7oV8) => {
+  if (persistedState.defaultChatConfig.model === 'gpt-4o') {
+    persistedState.defaultChatConfig.model = defaultModel;
+  }
+  persistedState.defaultChatConfig.max_tokens = 128000;
+};
+
 export const fix11 = (persistedState: StoreState) => {
   if (!persistedState.defaultChatConfig.model) {
     persistedState.defaultChatConfig.model = defaultModel;
