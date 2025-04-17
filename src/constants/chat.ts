@@ -26,7 +26,7 @@ export const modelOptions: ModelOptions[] = [
   // 'gpt-4o-mini',
   'gpt-4.1',
   'gpt-4o',
-  'o3-mini-high',
+  'o4-mini-high',
   'claude-3-7-sonnet',
   'claude-3-7-sonnet-thinking',
   'deepseek-r1',
@@ -62,7 +62,7 @@ export const modelMaxToken = {
   'gpt-4.1-nano': 1000000,
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
-  'o3-mini-high': 200000,
+  'o4-mini-high': 200000,
   'claude-3-7-sonnet': 200000,
   'claude-3-7-sonnet-thinking': 200000,
   'deepseek-r1': 128000,
@@ -171,7 +171,7 @@ export const modelCost = {
     prompt: { price: 0.15, unit: 1000000 },
     completion: { price: 0.60, unit: 1000000 },
   },
-  'o3-mini-high': {
+  'o4-mini-high': {
     prompt: { price: 1.10, unit: 1000000 },
     completion: { price: 4.40, unit: 1000000 },
   },

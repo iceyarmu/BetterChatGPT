@@ -102,7 +102,7 @@ export const getChatCompletionStream = async (
   //   config.model = 'gpt-4o-mini';
   // }
   const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
-  const reasoning_effort = config.model === 'o3-mini-high' ? 'high' : undefined;
+  const reasoning_effort = config.model === 'o4-mini-high' ? 'high' : undefined;
 
   // set temperature to 0.6 for deepseek-r1
   if (config.model === 'deepseek-r1') {
