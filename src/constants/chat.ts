@@ -27,8 +27,8 @@ export const modelOptions: ModelOptions[] = [
   'gpt-4.1',
   'gpt-4o',
   'o4-mini-high',
-  'claude-3-7-sonnet',
-  'claude-3-7-sonnet-thinking',
+  'claude-4-sonnet',
+  'claude-4-sonnet-thinking',
   'deepseek-r1',
   'gemini-2.5-pro',
   'grok-3',
@@ -63,8 +63,8 @@ export const modelMaxToken = {
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
   'o4-mini-high': 200000,
-  'claude-3-7-sonnet': 200000,
-  'claude-3-7-sonnet-thinking': 200000,
+  'claude-4-sonnet': 200000,
+  'claude-4-sonnet-thinking': 200000,
   'deepseek-r1': 128000,
   'gemini-2.5-pro': 1000000,
   'grok-3': 128000,
@@ -175,11 +175,11 @@ export const modelCost = {
     prompt: { price: 1.10, unit: 1000000 },
     completion: { price: 4.40, unit: 1000000 },
   },
-  'claude-3-7-sonnet': {
+  'claude-4-sonnet': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
   },
-  'claude-3-7-sonnet-thinking': {
+  'claude-4-sonnet-thinking': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
   },
