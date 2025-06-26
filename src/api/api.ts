@@ -103,6 +103,7 @@ export const getChatCompletionStream = async (
   // }
   const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
   const reasoning_effort = config.model === 'o4-mini-high' ? 'high' : undefined;
+  const reasoning = config.model.startsWith('claude') && config.model.endsWith('-thinking') ? {'max_tokens': 6000} : undefined;
 
   // set temperature to 0.6 for deepseek-r1
   if (config.model === 'deepseek-r1') {
@@ -119,6 +120,7 @@ export const getChatCompletionStream = async (
       stream: true,
       include_reasoning,
       reasoning_effort,
+      reasoning,
     }),
   });
   if (response.status === 404 || response.status === 405) {
