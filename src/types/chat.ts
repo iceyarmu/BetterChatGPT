@@ -73,7 +73,7 @@ export type ModelOptions =
   'claude-4-sonnet-thinking' |
   'deepseek-r1' |
   'gemini-2.5-pro' |
-  'grok-3'
+  'grok-4'
   ;
 
 export type TotalTokenUsed = {
