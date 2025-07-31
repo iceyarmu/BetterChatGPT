@@ -69,8 +69,10 @@ export type ModelOptions =
   'gpt-4o' |
   'gpt-4o-mini' |
   'o4-mini-high' |
-  'claude-4-sonnet' |
-  'claude-4-sonnet-thinking' |
+  'claude-opus-4' |
+  'claude-opus-4-thinking' |
+  'claude-sonnet-4' |
+  'claude-sonnet-4-thinking' |
   'deepseek-r1' |
   'gemini-2.5-pro' |
   'grok-4'

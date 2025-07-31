@@ -27,8 +27,10 @@ export const modelOptions: ModelOptions[] = [
   'gpt-4.1',
   'gpt-4o',
   'o4-mini-high',
-  'claude-4-sonnet',
-  'claude-4-sonnet-thinking',
+  'claude-opus-4',
+  // 'claude-opus-4-thinking',
+  'claude-sonnet-4',
+  // 'claude-sonnet-4-thinking',
   'deepseek-r1',
   'gemini-2.5-pro',
   'grok-4',
@@ -63,8 +65,10 @@ export const modelMaxToken = {
   'gpt-4o': 128000,
   'gpt-4o-mini': 128000,
   'o4-mini-high': 200000,
-  'claude-4-sonnet': 200000,
-  'claude-4-sonnet-thinking': 200000,
+  'claude-opus-4': 200000,
+  'claude-opus-4-thinking': 200000,
+  'claude-sonnet-4': 200000,
+  'claude-sonnet-4-thinking': 200000,
   'deepseek-r1': 128000,
   'gemini-2.5-pro': 1000000,
   'grok-4': 128000,
@@ -175,11 +179,19 @@ export const modelCost = {
     prompt: { price: 1.10, unit: 1000000 },
     completion: { price: 4.40, unit: 1000000 },
   },
-  'claude-4-sonnet': {
+  'claude-opus-4': {
+    prompt: { price: 15.00, unit: 1000000 },
+    completion: { price: 75.00, unit: 1000000 },
+  },
+  'claude-opus-4-thinking': {
+    prompt: { price: 15.00, unit: 1000000 },
+    completion: { price: 75.00, unit: 1000000 },
+  },
+  'claude-sonnet-4': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
   },
-  'claude-4-sonnet-thinking': {
+  'claude-sonnet-4-thinking': {
     prompt: { price: 3.00, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
   },
