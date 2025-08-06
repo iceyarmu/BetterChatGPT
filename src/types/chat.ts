@@ -70,7 +70,7 @@ export type ModelOptions =
   'gpt-4o-mini' |
   'o3' |
   'o4-mini-high' |
-  'claude-opus-4' |
+  'claude-opus-4-1' |
   'claude-opus-4-thinking' |
   'claude-sonnet-4' |
   'claude-sonnet-4-thinking' |
