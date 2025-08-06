@@ -68,6 +68,7 @@ export type ModelOptions =
   'gpt-4.1-nano' |
   'gpt-4o' |
   'gpt-4o-mini' |
+  'o3' |
   'o4-mini-high' |
   'claude-opus-4' |
   'claude-opus-4-thinking' |
