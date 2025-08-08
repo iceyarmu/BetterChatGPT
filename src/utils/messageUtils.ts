@@ -92,7 +92,7 @@ const genSystemMessage = () : MessageInterface => {
     ('0' + date.getMinutes()).slice(-2);
   return {
     role: 'system',
-    content: "You are ChatGPT 4, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
+    content: "You are ChatGPT 5, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
   }
 }
 

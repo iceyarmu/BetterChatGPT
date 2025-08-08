@@ -64,6 +64,8 @@ export type ModelOptions =
 // | 'gpt-4-32k-0314'
   // 'claude-3-5-haiku' |
   // 'qwen2.5-coder:32b' |
+  'gpt-5' |
+  'gpt-5-nano' |
   'gpt-4.1' |
   'gpt-4.1-nano' |
   'gpt-4o' |
