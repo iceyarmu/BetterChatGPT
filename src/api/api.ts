@@ -50,6 +50,7 @@ export const getChatCompletion = async (
       messages,
       ...config,
       max_tokens: undefined,
+      reasoning_effort: 'minimal',
     }),
   });
   if (!response.ok) throw new Error(await response.text());
