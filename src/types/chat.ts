@@ -52,18 +52,6 @@ export interface Folder {
 
 //这里注册所有可请求的模型列表
 export type ModelOptions =
-  // 'gpt-4' |
-  // 'gpt-4-32k' |
-  // 'gpt-3.5-turbo' |
-  // 'gpt-3.5-turbo-16k' |
-  // 'gpt-4-turbo' |
-  // 'deepseek-v3';
-// | 'gpt-4-1106-preview' | 'gpt-4-turbo-preview' ;
-// | 'gpt-3.5-turbo-0301';
-// | 'gpt-4-0314'
-// | 'gpt-4-32k-0314'
-  // 'claude-3-5-haiku' |
-  // 'qwen2.5-coder:32b' |
   'gpt-5' |
   'gpt-5-nano' |
   'gpt-4.1' |
@@ -72,10 +60,8 @@ export type ModelOptions =
   'gpt-4o-mini' |
   'o3' |
   'o4-mini-high' |
-  'claude-opus-4-1' |
-  'claude-opus-4-thinking' |
-  'claude-sonnet-4' |
-  'claude-sonnet-4-thinking' |
+  'claude-opus-4-1-thinking' |
+  'claude-sonnet-4-5-thinking' |
   'deepseek-r1' |
   'gemini-2.5-pro' |
   'grok-4'
