@@ -52,6 +52,9 @@ export interface Folder {
 
 //这里注册所有可请求的模型列表
 export type ModelOptions =
+  'gpt-5.1' |
+  'gpt-5.1-thinking' |
+  'gpt-5.1-chat-latest' |
   'gpt-5' |
   'gpt-5-nano' |
   'gpt-4.1' |

@@ -103,12 +103,20 @@ export const getChatCompletionStream = async (
   //   config.model = 'gpt-4o-mini';
   // }
   const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
-  const reasoning_effort = config.model === 'o4-mini-high' || config.model === 'o3' ? 'high' : undefined;
+  const reasoning_effort = config.model.startsWith('gpt') && config.model.endsWith('-thinking') ? 'high' : undefined;
   const reasoning = config.model.startsWith('claude') && config.model.endsWith('-thinking') ? {'max_tokens': 32000} : undefined;
 
   // set temperature to 0.6 for deepseek-r1
   if (config.model === 'deepseek-r1') {
     config.temperature = 0.6;
+  }
+  
+  // remap model names
+  let model = config.model;
+  if (model === 'gpt-5.1') {
+    model = 'gpt-5.1-chat-latest';
+  } else if (model === 'gpt-5.1-thinking') {
+    model = 'gpt-5.1';
   }
 
   const response = await fetch(endpoint, {
@@ -117,6 +125,7 @@ export const getChatCompletionStream = async (
     body: JSON.stringify({
       messages,
       ...config,
+      model: model,
       max_tokens: undefined,
       stream: true,
       include_reasoning,
