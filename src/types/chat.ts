@@ -66,7 +66,7 @@ export type ModelOptions =
   'claude-opus-4-1-thinking' |
   'claude-sonnet-4-5-thinking' |
   'deepseek-r1' |
-  'gemini-2.5-pro' |
+  'gemini-3-pro' |
   'grok-4'
   ;
 
