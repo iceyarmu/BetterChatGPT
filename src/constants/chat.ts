@@ -19,11 +19,12 @@ export const modelOptions: ModelOptions[] = [
   'gpt-5.1-thinking',
   'gpt-4.1',
   'gpt-4o',
-  'claude-opus-4-1-thinking',
+  'claude-opus-4-5-thinking',
   'claude-sonnet-4-5-thinking',
   'deepseek-r1',
   'gemini-3-pro',
   'grok-4',
+  'grok-4.1-fast',
 ];
 
 export const defaultModel = 'gpt-5.1';
@@ -40,11 +41,12 @@ export const modelMaxToken = {
   'gpt-4o-mini': 128000,
   'o3': 200000,
   'o4-mini-high': 200000,
-  'claude-opus-4-1-thinking': 200000,
+  'claude-opus-4-5-thinking': 200000,
   'claude-sonnet-4-5-thinking': 200000,
   'deepseek-r1': 128000,
   'gemini-3-pro': 1000000,
-  'grok-4': 128000,
+  'grok-4': 2000000,
+  'grok-4.1-fast': 2000000,
 };
 
 export const modelCost = {
@@ -92,9 +94,9 @@ export const modelCost = {
     prompt: { price: 1.10, unit: 1000000 },
     completion: { price: 4.40, unit: 1000000 },
   },
-  'claude-opus-4-1-thinking': {
-    prompt: { price: 15.00, unit: 1000000 },
-    completion: { price: 75.00, unit: 1000000 },
+  'claude-opus-4-5-thinking': {
+    prompt: { price: 5.00, unit: 1000000 },
+    completion: { price: 25.00, unit: 1000000 },
   },
   'claude-sonnet-4-5-thinking': {
     prompt: { price: 3.00, unit: 1000000 },
@@ -111,6 +113,10 @@ export const modelCost = {
   'grok-4': {
     prompt: { price: 3, unit: 1000000 },
     completion: { price: 15.00, unit: 1000000 },
+  },
+  'grok-4.1-fast': {
+    prompt: { price: 0.2, unit: 1000000 },
+    completion: { price: 0.5, unit: 1000000 },
   },
 };
 

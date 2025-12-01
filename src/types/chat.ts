@@ -63,11 +63,12 @@ export type ModelOptions =
   'gpt-4o-mini' |
   'o3' |
   'o4-mini-high' |
-  'claude-opus-4-1-thinking' |
+  'claude-opus-4-5-thinking' |
   'claude-sonnet-4-5-thinking' |
   'deepseek-r1' |
   'gemini-3-pro' |
-  'grok-4'
+  'grok-4' |
+  'grok-4.1-fast'
   ;
 
 export type TotalTokenUsed = {
