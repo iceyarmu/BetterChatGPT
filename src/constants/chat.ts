@@ -15,8 +15,8 @@ export const _defaultSystemMessage = ``;
 
 //这里注册所有可选择的模型列表
 export const modelOptions: ModelOptions[] = [
-  'gpt-5.1',
-  'gpt-5.1-thinking',
+  'gpt-5.2',
+  'gpt-5.2-thinking',
   'gpt-4.1',
   'gpt-4o',
   'claude-opus-4-5-thinking',
@@ -27,12 +27,12 @@ export const modelOptions: ModelOptions[] = [
   'grok-4.1-fast',
 ];
 
-export const defaultModel = 'gpt-5.1';
+export const defaultModel = 'gpt-5.2';
 
 export const modelMaxToken = {
-  'gpt-5.1': 400000,
-  'gpt-5.1-thinking': 400000,
-  'gpt-5.1-chat-latest': 400000,
+  'gpt-5.2': 400000,
+  'gpt-5.2-thinking': 400000,
+  'gpt-5.2-chat-latest': 400000,
   'gpt-5': 400000,
   'gpt-5-nano': 400000,
   'gpt-4.1': 1000000,
@@ -50,15 +50,15 @@ export const modelMaxToken = {
 };
 
 export const modelCost = {
-  'gpt-5.1': {
+  'gpt-5.2': {
     prompt: { price: 1.25, unit: 1000000 },
     completion: { price: 10, unit: 1000000 },
   },
-  'gpt-5.1-thinking': {
+  'gpt-5.2-thinking': {
     prompt: { price: 1.25, unit: 1000000 },
     completion: { price: 10, unit: 1000000 },
   },
-  'gpt-5.1-chat-latest': {
+  'gpt-5.2-chat-latest': {
     prompt: { price: 1.25, unit: 1000000 },
     completion: { price: 10, unit: 1000000 },
   },

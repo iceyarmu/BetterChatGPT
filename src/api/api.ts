@@ -113,10 +113,10 @@ export const getChatCompletionStream = async (
   
   // remap model names
   let model = config.model;
-  if (model === 'gpt-5.1') {
-    model = 'gpt-5.1-chat-latest';
-  } else if (model === 'gpt-5.1-thinking') {
-    model = 'gpt-5.1';
+  if (model === 'gpt-5.2') {
+    model = 'gpt-5.2-chat-latest';
+  } else if (model === 'gpt-5.2-thinking') {
+    model = 'gpt-5.2';
   }
 
   const response = await fetch(endpoint, {
