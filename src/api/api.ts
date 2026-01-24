@@ -106,13 +106,11 @@ export const getChatCompletionStream = async (
   const reasoning_effort = config.model.startsWith('gpt') && config.model.endsWith('-thinking') ? 'high' : undefined;
   const reasoning = config.model.startsWith('claude') && config.model.endsWith('-thinking') ? {'max_tokens': 32000} : undefined;
 
-  // set temperature to 0.6 for deepseek-r1
-  if (config.model === 'deepseek-r1') {
-    config.temperature = 0.6;
-  }
-  
+  // 排除 top_p 和 temperature
+  const { top_p: _top_p, temperature: _temperature, ...restConfig } = config;
+
   // remap model names
-  let model = config.model;
+  let model = restConfig.model;
   if (model === 'gpt-5.2') {
     model = 'gpt-5.2-chat-latest';
   } else if (model === 'gpt-5.2-thinking') {
@@ -124,7 +122,7 @@ export const getChatCompletionStream = async (
     headers,
     body: JSON.stringify({
       messages,
-      ...config,
+      ...restConfig,
       model: model,
       max_tokens: undefined,
       stream: true,
