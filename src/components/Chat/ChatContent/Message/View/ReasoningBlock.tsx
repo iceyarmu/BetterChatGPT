@@ -55,9 +55,8 @@ const ReasoningBlock = memo(({ reasoning, isGenerating }: ReasoningBlockProps) =
   };
 
   const hasContent = reasoning && reasoning.trim() !== '';
-  const showThinkingAnimation = isGenerating && !hasContent;
 
-  if (!hasContent && !showThinkingAnimation) return null;
+  if (!hasContent && !isGenerating) return null;
 
   return (
     <div className='mb-4 rounded-lg border border-gray-300 dark:border-gray-600 overflow-hidden'>
@@ -98,17 +97,11 @@ const ReasoningBlock = memo(({ reasoning, isGenerating }: ReasoningBlockProps) =
       </div>
 
       {/* Content */}
-      {isExpanded && (
+      {isExpanded && hasContent && (
         <div className='px-4 py-3 text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-800/50'>
-          {hasContent ? (
-            <div className='prose prose-sm dark:prose-invert max-w-none opacity-80'>
-              <ReactMarkdown>{reasoning}</ReactMarkdown>
-            </div>
-          ) : showThinkingAnimation ? (
-            <div className='italic opacity-60'>
-              {t('thinking')}{'.'.repeat(dotCount)}
-            </div>
-          ) : null}
+          <div className='prose prose-sm dark:prose-invert max-w-none opacity-80'>
+            <ReactMarkdown>{reasoning}</ReactMarkdown>
+          </div>
         </div>
       )}
     </div>
