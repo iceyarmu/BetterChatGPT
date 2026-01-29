@@ -18,7 +18,7 @@ export const ModelConfigs = [
   { modelName: 'claude-opus-4-5', apiName: 'claude-opus-4-5-thinking', isCompletions: true, displayName: 'Claude Opus 4.5' },
   { modelName: 'claude-sonnet-4-5', apiName: 'claude-sonnet-4-5-thinking', isCompletions: true, displayName: 'Claude Sonnet 4.5' },
   { modelName: 'deepseek-r1', displayName: 'DeepSeek R1' },
-  { modelName: 'gemini-3-pro', isCompletions: true, displayName: 'Gemini 3 Pro' },
+  { modelName: 'gemini-3-pro', apiName: 'gemini-3-pro-preview-thinking', isCompletions: true, displayName: 'Gemini 3 Pro' },
   { modelName: 'grok-4.1-fast', reasoning: 'high', displayName: 'Grok 4.1' },
 ] as const satisfies readonly ModelConfigBase[];
 

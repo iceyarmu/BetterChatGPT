@@ -79,6 +79,9 @@ export const parseCompletionsEventSource = (
       if (delta?.content) {
         result.push({ content: delta.content });
       }
+      if (delta?.reasoning_content) {
+        result.push({ reasoning: delta.reasoning_content });
+      }
       if (event.choices?.[0]?.finish_reason === 'stop') {
         result.push({ done: true });
       }
