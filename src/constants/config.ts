@@ -16,7 +16,7 @@ export const ModelConfigs = [
   { modelName: 'gpt-4o', displayName: 'GPT 4o' },
   { modelName: 'claude-opus-4-5', displayName: 'Claude Opus 4.5' },
   { modelName: 'claude-sonnet-4-5', displayName: 'Claude Sonnet 4.5' },
-  { modelName: 'deepseek-r1', reasoning: 'high', displayName: 'DeepSeek R1' },
+  { modelName: 'deepseek-r1', displayName: 'DeepSeek R1' },
   { modelName: 'gemini-3-pro', displayName: 'Gemini 3 Pro' },
   { modelName: 'grok-4.1-fast', reasoning: 'high', displayName: 'Grok 4.1' },
 ] as const satisfies readonly ModelConfigBase[];

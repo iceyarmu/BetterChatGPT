@@ -4,7 +4,8 @@ import { shallow } from 'zustand/shallow';
 import useStore from '@store/store';
 import ConfigMenu from '@components/ConfigMenu';
 import { ChatInterface, ConfigInterface, ModelOptions } from '@type/chat';
-import { _defaultChatConfig, modelOptions } from '@constants/chat';
+import { _defaultChatConfig } from '@constants/chat';
+import { getVisibleModels, getModelConfig } from '@constants/config';
 
 const ChatTitle = React.memo(() => {
   const { t } = useTranslation('model');
@@ -62,7 +63,7 @@ const ChatTitle = React.memo(() => {
         onClick={() => {
           setDropDown(!dropDown);
         }}>
-          {t('model')}: {config.model}
+          {t('model')}: {getModelConfig(config.model)?.displayName || config.model}
           <div
             id='dropdown'
             className={`${
@@ -73,16 +74,16 @@ const ChatTitle = React.memo(() => {
               className='text-sm text-gray-700 dark:text-gray-200 p-0 m-0'
               aria-labelledby='dropdownDefaultButton'
             >
-              {modelOptions.map((m) => (
+              {getVisibleModels().map((m) => (
                 <li
                   className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer'
                   onClick={() => {
-                    setConfig({ ...config, model: m });
+                    setConfig({ ...config, model: m.modelName });
                     setDropDown(false);
                   }}
-                  key={m}
+                  key={m.modelName}
                 >
-                  {m}
+                  {m.displayName || m.modelName}
                 </li>
               ))}
             </ul>
