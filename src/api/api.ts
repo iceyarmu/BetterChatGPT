@@ -74,6 +74,10 @@ export const getChatCompletion = async (
           ? systemMessages.map(m => m.content).join('\n')
           : undefined,
         reasoning,
+        ...(modelConfig?.webSearch && {
+          tools: [{ type: 'web_search', search_context_size: modelConfig.webSearch }],
+          tool_choice: 'auto',
+        }),
       }),
     });
 
@@ -130,6 +134,10 @@ export const getChatCompletionStream = async (
           : undefined,
         stream: true,
         reasoning,
+        ...(modelConfig?.webSearch && {
+          tools: [{ type: 'web_search', search_context_size: modelConfig.webSearch }],
+          tool_choice: 'auto',
+        }),
       }),
     });
   }

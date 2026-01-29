@@ -6,21 +6,71 @@ interface ModelConfigBase {
   displayHidden?: boolean;
   apiName?: string;
   isCompletions?: boolean;  // 使用 Chat Completions API 而不是 Responses API
+  webSearch?: string; // 网络搜索强度，如 'high'、'medium'、'low'
 }
 
 // 模型配置列表 (使用 as const + satisfies 保留字面量类型并校验结构)
 export const ModelConfigs = [
-  { modelName: 'gpt-5.2', apiName: 'gpt-5.2-chat-latest-corp', reasoning: 'none', displayName: 'GPT 5.2' },
-  { modelName: 'gpt-5.2-thinking', apiName: 'gpt-5.2-corp', reasoning: 'high', displayName: 'GPT 5.2 Thinking' },
-  { modelName: 'gpt-5-nano', apiName: 'gpt-5-nano-corp', reasoning: 'minimal', displayHidden: true },
-  { modelName: 'gpt-4.1', displayName: 'GPT 4.1' },
-  { modelName: 'gpt-4o', displayName: 'GPT 4o' },
-  { modelName: 'claude-opus-4-5', apiName: 'claude-opus-4-5-thinking', isCompletions: true, displayName: 'Claude Opus 4.5' },
-  { modelName: 'claude-sonnet-4-5', apiName: 'claude-sonnet-4-5-thinking', isCompletions: true, displayName: 'Claude Sonnet 4.5' },
-  { modelName: 'deepseek-r1', displayName: 'DeepSeek R1' },
-  { modelName: 'gemini-3-pro', apiName: 'gemini-3-pro-preview-thinking', isCompletions: true, displayName: 'Gemini 3 Pro' },
-  { modelName: 'gemini-2.5-flash-lite', apiName: 'gemini-2.5-flash-lite', isCompletions: true, displayHidden: true },
-  { modelName: 'grok-4.1-fast', reasoning: 'high', displayName: 'Grok 4.1' },
+  {
+    modelName: 'gpt-5.2',
+    apiName: 'gpt-5.2-chat-latest-corp',
+    reasoning: 'none',
+    displayName: 'GPT 5.2',
+  },
+  {
+    modelName: 'gpt-5.2-thinking',
+    apiName: 'gpt-5.2-corp',
+    reasoning: 'high',
+    webSearch: 'high',
+    displayName: 'GPT 5.2 Thinking',
+  },
+  {
+    modelName: 'gpt-5-nano',
+    apiName: 'gpt-5-nano-corp',
+    reasoning: 'minimal',
+    displayHidden: true,
+  },
+  {
+    modelName: 'gpt-4.1',
+    displayName: 'GPT 4.1',
+  },
+  {
+    modelName: 'gpt-4o',
+    displayName: 'GPT 4o',
+  },
+  {
+    modelName: 'claude-opus-4-5',
+    apiName: 'claude-opus-4-5-thinking',
+    isCompletions: true,
+    displayName: 'Claude Opus 4.5',
+  },
+  {
+    modelName: 'claude-sonnet-4-5',
+    apiName: 'claude-sonnet-4-5-thinking',
+    isCompletions: true,
+    displayName: 'Claude Sonnet 4.5',
+  },
+  {
+    modelName: 'deepseek-r1',
+    displayName: 'DeepSeek R1',
+  },
+  {
+    modelName: 'gemini-3-pro',
+    apiName: 'gemini-3-pro-preview-thinking',
+    isCompletions: true,
+    displayName: 'Gemini 3 Pro',
+  },
+  {
+    modelName: 'gemini-2.5-flash-lite',
+    apiName: 'gemini-2.5-flash-lite',
+    isCompletions: true,
+    displayHidden: true,
+  },
+  {
+    modelName: 'grok-4.1-fast',
+    reasoning: 'high',
+    displayName: 'Grok 4.1',
+  },
 ] as const satisfies readonly ModelConfigBase[];
 
 // 从配置中提取所有模型名作为类型
@@ -34,6 +84,7 @@ export interface ModelConfig {
   displayHidden?: boolean;
   apiName?: string;
   isCompletions?: boolean;  // 使用 Chat Completions API 而不是 Responses API
+  webSearch?: string; // 网络搜索强度，如 'high'、'medium'、'low'
 }
 
 // 辅助函数：获取模型配置
