@@ -1,4 +1,4 @@
-export const officialAPIEndpoint = '/v4/chat/completions';
+export const officialAPIEndpoint = '/v4/responses';
 const customAPIEndpoint =
   import.meta.env.VITE_CUSTOM_API_ENDPOINT || 'https://chatgpt-api.shn.hk/v1/';
 export const defaultAPIEndpoint =

@@ -1,23 +1,74 @@
-export interface EventSourceDataInterface {
-  choices: EventSourceDataChoices[];
-  created: number;
-  id: string;
-  model: string;
-  object: string;
-}
+// ========== Responses API Types ==========
 
-export type EventSourceData = EventSourceDataInterface | '[DONE]';
+// Responses API 流式事件类型
+export type ResponsesStreamEventType =
+  | 'response.created'
+  | 'response.in_progress'
+  | 'response.output_item.added'
+  | 'response.output_text.delta'
+  | 'response.output_text.done'
+  | 'response.reasoning.delta'
+  | 'response.reasoning.done'
+  | 'response.completed'
+  | 'response.failed'
+  | 'error';
 
-export interface EventSourceDataChoices {
-  delta: {
-    content?: string;
-    role?: string;
-    reasoning?: string;
-    reasoning_content?: string;
+// 流式事件接口
+export interface ResponsesStreamEvent {
+  type: ResponsesStreamEventType;
+  delta?: string;
+  text?: string;
+  item_id?: string;
+  output_index?: number;
+  content_index?: number;
+  sequence_number?: number;
+  response?: ResponsesApiResponse;
+  error?: {
+    type: string;
+    message: string;
   };
-  finish_reason?: string;
-  index: number;
 }
+
+// 非流式响应
+export interface ResponsesApiResponse {
+  id: string;
+  object: 'response';
+  created_at: number;
+  status: 'completed' | 'failed' | 'in_progress' | 'cancelled';
+  model: string;
+  output: ResponsesOutputItem[];
+  usage?: {
+    input_tokens: number;
+    output_tokens: number;
+    reasoning_tokens?: number;
+  };
+}
+
+export interface ResponsesOutputItem {
+  type: 'message' | 'reasoning';
+  id: string;
+  role?: 'assistant';
+  content?: ResponsesContentPart[];
+  summary?: ResponsesContentPart[];
+}
+
+export interface ResponsesContentPart {
+  type: 'output_text' | 'refusal';
+  text?: string;
+  refusal?: string;
+}
+
+// 统一的解析结果格式
+export interface ParsedStreamData {
+  content?: string;
+  reasoning?: string;
+  done?: boolean;
+  error?: string;
+}
+
+export type EventSourceData = ResponsesStreamEvent | ParsedStreamData | '[DONE]';
+
+// ========== ShareGPT Types ==========
 
 export interface ShareGPTSubmitBodyInterface {
   avatarUrl: string;

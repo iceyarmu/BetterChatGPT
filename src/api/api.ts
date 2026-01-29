@@ -1,6 +1,44 @@
-import { ShareGPTSubmitBodyInterface } from '@type/api';
-import { ConfigInterface, MessageInterface, ModelOptions } from '@type/chat';
-import { isAzureEndpoint } from '@utils/api';
+import { ShareGPTSubmitBodyInterface, ResponsesApiResponse } from '@type/api';
+import { ConfigInterface, MessageInterface } from '@type/chat';
+
+// 从 Responses API 响应中提取内容
+const extractResponseContent = (data: ResponsesApiResponse): { content: string; reasoning?: string } => {
+  let content = '';
+  let reasoning = '';
+
+  for (const item of data.output || []) {
+    if (item.type === 'message' && item.content) {
+      for (const part of item.content) {
+        if (part.type === 'output_text' && part.text) {
+          content += part.text;
+        }
+      }
+    } else if (item.type === 'reasoning' && item.summary) {
+      for (const part of item.summary) {
+        if (part.type === 'output_text' && part.text) {
+          reasoning += part.text;
+        }
+      }
+    }
+  }
+
+  return { content, reasoning: reasoning || undefined };
+};
+
+// 模型名称映射
+const mapModelName = (model: string): string => {
+  if (model === 'gpt-5.2') {
+    return 'gpt-5.2-chat-latest';
+  } else if (model === 'gpt-5.2-thinking') {
+    return 'gpt-5.2';
+  }
+  return model;
+};
+
+// 判断是否为 thinking 模型
+const isThinkingModel = (model: string): boolean => {
+  return model.endsWith('-thinking') || model === 'deepseek-r1';
+};
 
 export const getChatCompletion = async (
   endpoint: string,
@@ -15,48 +53,29 @@ export const getChatCompletion = async (
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  // if (isAzureEndpoint(endpoint) && apiKey) {
-  //   headers['api-key'] = apiKey;
+  // 分离 system message 作为 instructions
+  const systemMessages = messages.filter(m => m.role === 'system');
+  const inputMessages = messages.filter(m => m.role !== 'system');
 
-  //   const modelmapping: Partial<Record<ModelOptions, string>> = {
-  //     'gpt-3.5-turbo': 'gpt-35-turbo',
-  //     'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
-  //     // 'gpt-3.5-turbo-1106': 'gpt-35-turbo-1106',
-  //     // 'gpt-3.5-turbo-0125': 'gpt-35-turbo-0125',
-  //   };
-
-  //   const model = modelmapping[config.model] || config.model;
-
-  //   // set api version to 2023-07-01-preview for gpt-4 and gpt-4-32k, otherwise use 2023-03-15-preview
-  //   const apiVersion =
-  //     model === 'gpt-4' || model === 'gpt-4-32k'
-  //       ? '2023-07-01-preview'
-  //       : '2023-03-15-preview';
-
-  //   const path = `openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
-
-  //   if (!endpoint.endsWith(path)) {
-  //     if (!endpoint.endsWith('/')) {
-  //       endpoint += '/';
-  //     }
-  //     endpoint += path;
-  //   }
-  // }
+  const model = mapModelName(config.model);
 
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      messages,
-      ...config,
-      max_tokens: undefined,
-      reasoning_effort: 'minimal',
+      model,
+      input: inputMessages.map(m => ({ role: m.role, content: m.content })),
+      instructions: systemMessages.length > 0
+        ? systemMessages.map(m => m.content).join('\n')
+        : undefined,
+      reasoning: isThinkingModel(config.model) ? { effort: 'minimal' } : undefined,
     }),
   });
+
   if (!response.ok) throw new Error(await response.text());
 
-  const data = await response.json();
-  return data;
+  const data: ResponsesApiResponse = await response.json();
+  return extractResponseContent(data);
 };
 
 export const getChatCompletionStream = async (
@@ -72,65 +91,26 @@ export const getChatCompletionStream = async (
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  // if (isAzureEndpoint(endpoint) && apiKey) {
-  //   headers['api-key'] = apiKey;
+  // 分离 system message 作为 instructions
+  const systemMessages = messages.filter(m => m.role === 'system');
+  const inputMessages = messages.filter(m => m.role !== 'system');
 
-  //   const modelmapping: Partial<Record<ModelOptions, string>> = {
-  //     'gpt-3.5-turbo': 'gpt-35-turbo',
-  //     'gpt-3.5-turbo-16k': 'gpt-35-turbo-16k',
-  //   };
-
-  //   const model = modelmapping[config.model] || config.model;
-
-  //   // set api version to 2023-07-01-preview for gpt-4 and gpt-4-32k, otherwise use 2023-03-15-preview
-  //   const apiVersion =
-  //     model === 'gpt-4' || model === 'gpt-4-32k'
-  //       ? '2023-07-01-preview'
-  //       : '2023-03-15-preview';
-  //   const path = `openai/deployments/${model}/chat/completions?api-version=${apiVersion}`;
-
-  //   if (!endpoint.endsWith(path)) {
-  //     if (!endpoint.endsWith('/')) {
-  //       endpoint += '/';
-  //     }
-  //     endpoint += path;
-  //   }
-  // }
-
-  //save money
-  // const modle = config.model.toString();
-  // if (modle.indexOf('preview') > -1) {
-  //   config.model = 'gpt-4o-mini';
-  // }
-  const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
-  const reasoning_effort = config.model.startsWith('gpt') && config.model.endsWith('-thinking') ? 'high' : undefined;
-  // const reasoning = config.model.startsWith('claude') && config.model.endsWith('-thinking') ? {'max_tokens': 32000} : undefined;
-
-  // 排除 top_p 和 temperature
-  const { top_p: _top_p, temperature: _temperature, ...restConfig } = config;
-
-  // remap model names
-  let model = restConfig.model;
-  if (model === 'gpt-5.2') {
-    model = 'gpt-5.2-chat-latest';
-  } else if (model === 'gpt-5.2-thinking') {
-    model = 'gpt-5.2';
-  }
+  const model = mapModelName(config.model);
 
   const response = await fetch(endpoint, {
     method: 'POST',
     headers,
     body: JSON.stringify({
-      messages,
-      ...restConfig,
-      model: model,
-      max_tokens: undefined,
+      model,
+      input: inputMessages.map(m => ({ role: m.role, content: m.content })),
+      instructions: systemMessages.length > 0
+        ? systemMessages.map(m => m.content).join('\n')
+        : undefined,
       stream: true,
-      include_reasoning,
-      reasoning_effort,
-      // reasoning,
+      reasoning: isThinkingModel(config.model) ? { effort: 'high' } : undefined,
     }),
   });
+
   if (response.status === 404 || response.status === 405) {
     const text = await response.text();
 

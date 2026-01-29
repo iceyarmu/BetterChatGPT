@@ -2,6 +2,7 @@ import React from 'react';
 import useStore from '@store/store';
 import { useTranslation } from 'react-i18next';
 import { ChatInterface, MessageInterface } from '@type/chat';
+import { ParsedStreamData } from '@type/api';
 import { getChatCompletion, getChatCompletionStream } from '@api/api';
 import { parseEventSource } from '@api/helper';
 import { limitMessageTokens, updateTotalTokenUsed } from '@utils/messageUtils';
@@ -22,31 +23,18 @@ const useSubmit = () => {
   const generateTitle = async (
     message: MessageInterface[]
   ): Promise<string> => {
-    let data;
     let config = {..._defaultChatConfig};
     config.model = 'gpt-5-nano';
-    if (!apiKey || apiKey.length === 0) {
-      // official endpoint
-      // if (apiEndpoint === officialAPIEndpoint) {
-      //   throw new Error(t('noApiKeyWarning') as string);
-      // }
 
-      // other endpoints
-      data = await getChatCompletion(
-        apiEndpoint,
-        message,
-        config
-      );
-    } else if (apiKey) {
-      // own apikey
-      data = await getChatCompletion(
-        apiEndpoint,
-        message,
-        config,
-        apiKey
-      );
-    }
-    return data.choices[0].message.content;
+    // getChatCompletion 现在返回 { content, reasoning }
+    const result = await getChatCompletion(
+      apiEndpoint,
+      message,
+      config,
+      apiKey || undefined
+    );
+
+    return result.content;
   };
 
   const handleSubmit = async () => {
@@ -75,28 +63,13 @@ const useSubmit = () => {
       );
       if (messages.length === 0) throw new Error('Message exceed max token!');
 
-      // no api key (free)
-      if (!apiKey || apiKey.length === 0) {
-        // official endpoint
-        // if (apiEndpoint === officialAPIEndpoint) {
-        //   throw new Error(t('noApiKeyWarning') as string);
-        // }
-
-        // other endpoints
-        stream = await getChatCompletionStream(
-          apiEndpoint,
-          messages,
-          chats[currentChatIndex].config
-        );
-      } else if (apiKey) {
-        // own apikey
-        stream = await getChatCompletionStream(
-          apiEndpoint,
-          messages,
-          chats[currentChatIndex].config,
-          apiKey
-        );
-      }
+      // 获取流式响应
+      stream = await getChatCompletionStream(
+        apiEndpoint,
+        messages,
+        chats[currentChatIndex].config,
+        apiKey || undefined
+      );
 
       if (stream) {
         if (stream.locked)
@@ -106,6 +79,7 @@ const useSubmit = () => {
         const reader = stream.getReader();
         let reading = true;
         let partial = '';
+
         while (reading && useStore.getState().generating) {
           const { done, value } = await reader.read();
           const result = parseEventSource(
@@ -116,18 +90,29 @@ const useSubmit = () => {
           if (result === '[DONE]' || done) {
             reading = false;
           } else {
-            const resultString = result.reduce((output: string[], curr) => {
-              if (typeof curr === 'string') {
-                partial += curr;
-              } else {
-                const delta = curr.choices[0]?.delta ?? null;
-                const content = delta?.content ?? null;
-                if (content) output[0] += content;
-                const reasoning = delta?.reasoning ?? delta?.reasoning_content ?? null;
-                if (reasoning) output[1] += reasoning;
-              }
-              return output;
-            }, ['', '']);
+            // 处理 Responses API 格式的流式数据
+            const resultString = (result as ParsedStreamData[]).reduce(
+              (output: string[], curr) => {
+                // 检查是否完成或出错
+                if (curr.done) {
+                  reading = false;
+                }
+                if (curr.error) {
+                  throw new Error(curr.error);
+                }
+
+                // 提取 content 和 reasoning
+                if (curr.content) {
+                  output[0] += curr.content;
+                }
+                if (curr.reasoning) {
+                  output[1] += curr.reasoning;
+                }
+
+                return output;
+              },
+              ['', '']
+            );
 
             const updatedChats: ChatInterface[] = JSON.parse(
               JSON.stringify(useStore.getState().chats)
