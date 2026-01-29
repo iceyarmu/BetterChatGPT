@@ -10,9 +10,9 @@ interface ModelConfigBase {
 
 // 模型配置列表 (使用 as const + satisfies 保留字面量类型并校验结构)
 export const ModelConfigs = [
-  { modelName: 'gpt-5.2', apiName: 'gpt-5.2-chat-latest', reasoning: 'none', displayName: 'GPT 5.2' },
-  { modelName: 'gpt-5.2-thinking', apiName: 'gpt-5.2', reasoning: 'high', displayName: 'GPT 5.2 Thinking' },
-  { modelName: 'gpt-5-nano', reasoning: 'minimal', displayHidden: true },
+  { modelName: 'gpt-5.2', apiName: 'gpt-5.2-chat-latest-corp', reasoning: 'none', displayName: 'GPT 5.2' },
+  { modelName: 'gpt-5.2-thinking', apiName: 'gpt-5.2-corp', reasoning: 'high', displayName: 'GPT 5.2 Thinking' },
+  { modelName: 'gpt-5-nano', apiName: 'gpt-5-nano-corp', reasoning: 'minimal', displayHidden: true },
   { modelName: 'gpt-4.1', displayName: 'GPT 4.1' },
   { modelName: 'gpt-4o', displayName: 'GPT 4o' },
   { modelName: 'claude-opus-4-5', apiName: 'claude-opus-4-5-thinking', isCompletions: true, displayName: 'Claude Opus 4.5' },
