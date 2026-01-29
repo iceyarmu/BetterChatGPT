@@ -3,7 +3,6 @@ interface ModelConfigBase {
   modelName: string;
   reasoning?: string;
   displayName?: string;
-  displayHidden?: boolean;
   apiName?: string;
   isCompletions?: boolean;  // 使用 Chat Completions API 而不是 Responses API
   webSearch?: string; // 网络搜索强度，如 'high'、'medium'、'low'
@@ -21,14 +20,13 @@ export const ModelConfigs = [
     modelName: 'gpt-5.2-thinking',
     apiName: 'gpt-5.2-corp',
     reasoning: 'high',
-    webSearch: 'high',
+    webSearch: 'low',
     displayName: 'GPT 5.2 Thinking',
   },
   {
     modelName: 'gpt-5-nano',
     apiName: 'gpt-5-nano-corp',
     reasoning: 'minimal',
-    displayHidden: true,
   },
   {
     modelName: 'gpt-4.1',
@@ -64,7 +62,6 @@ export const ModelConfigs = [
     modelName: 'gemini-2.5-flash-lite',
     apiName: 'gemini-2.5-flash-lite',
     isCompletions: true,
-    displayHidden: true,
   },
   {
     modelName: 'grok-4.1-fast',
@@ -81,7 +78,6 @@ export interface ModelConfig {
   modelName: ModelOptions;
   reasoning?: string;
   displayName?: string;
-  displayHidden?: boolean;
   apiName?: string;
   isCompletions?: boolean;  // 使用 Chat Completions API 而不是 Responses API
   webSearch?: string; // 网络搜索强度，如 'high'、'medium'、'low'
@@ -94,7 +90,7 @@ export const getModelConfig = (model: ModelOptions): ModelConfig | undefined => 
 
 // 辅助函数：获取可见模型列表（用于 UI）
 export const getVisibleModels = (): ModelConfig[] => {
-  return (ModelConfigs as readonly ModelConfig[]).filter(c => !c.displayHidden);
+  return (ModelConfigs as readonly ModelConfig[]).filter(c => !!c.displayName);
 };
 
 // 辅助函数：获取所有模型名列表（用于验证）
