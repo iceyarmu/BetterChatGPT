@@ -74,6 +74,45 @@ export interface ParsedStreamData {
 
 export type EventSourceData = ResponsesStreamEvent | ParsedStreamData | '[DONE]';
 
+// ========== Chat Completions API Types ==========
+
+// Chat Completions 流式事件
+export interface ChatCompletionsStreamEvent {
+  id: string;
+  object: 'chat.completion.chunk';
+  created: number;
+  model: string;
+  choices: {
+    index: number;
+    delta: {
+      role?: string;
+      content?: string;
+    };
+    finish_reason: string | null;
+  }[];
+}
+
+// Chat Completions 非流式响应
+export interface ChatCompletionsResponse {
+  id: string;
+  object: 'chat.completion';
+  created: number;
+  model: string;
+  choices: {
+    index: number;
+    message: {
+      role: string;
+      content: string;
+    };
+    finish_reason: string;
+  }[];
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
+}
+
 // ========== ShareGPT Types ==========
 
 export interface ShareGPTSubmitBodyInterface {

@@ -1,8 +1,10 @@
-export const officialAPIEndpoint = '/v4/responses';
-const customAPIEndpoint =
-  import.meta.env.VITE_CUSTOM_API_ENDPOINT || 'https://chatgpt-api.shn.hk/v1/';
-export const defaultAPIEndpoint =
-  import.meta.env.VITE_DEFAULT_API_ENDPOINT || officialAPIEndpoint;
-export const defaultAPIKey = import.meta.env.VITE_OPENAI_API_KEY || '';
+// 基础 API 路径
+export const officialAPIEndpoint = import.meta.env.VITE_DEFAULT_API_ENDPOINT || '/v4';
 
-export const availableEndpoints = [officialAPIEndpoint, customAPIEndpoint];
+// Responses API 端点
+export const responsesAPIEndpoint = `${officialAPIEndpoint}/responses`;
+
+// Chat Completions API 端点
+export const completionsAPIEndpoint = `${officialAPIEndpoint}/chat/completions`;
+
+export const defaultAPIKey = import.meta.env.VITE_OPENAI_API_KEY || '';

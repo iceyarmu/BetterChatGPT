@@ -1,4 +1,4 @@
-import { EventSourceData, ResponsesStreamEvent, ParsedStreamData } from '@type/api';
+import { EventSourceData, ResponsesStreamEvent, ParsedStreamData, ChatCompletionsStreamEvent } from '@type/api';
 
 // 将 Responses API 事件转换为统一格式
 const convertToUnifiedFormat = (event: ResponsesStreamEvent): ParsedStreamData | null => {
@@ -51,6 +51,38 @@ export const parseEventSource = (
       }
     } catch {
       // JSON 解析失败，可能是不完整的数据，跳过
+      continue;
+    }
+  }
+
+  return result;
+};
+
+// 解析 Chat Completions API 流式事件
+export const parseCompletionsEventSource = (
+  data: string
+): '[DONE]' | ParsedStreamData[] => {
+  const result: ParsedStreamData[] = [];
+  const lines = data.split('\n');
+
+  for (const line of lines) {
+    if (!line.startsWith('data: ')) continue;
+    const jsonString = line.slice(6).trim();
+
+    if (jsonString === '[DONE]') {
+      return '[DONE]';
+    }
+
+    try {
+      const event: ChatCompletionsStreamEvent = JSON.parse(jsonString);
+      const delta = event.choices?.[0]?.delta;
+      if (delta?.content) {
+        result.push({ content: delta.content });
+      }
+      if (event.choices?.[0]?.finish_reason === 'stop') {
+        result.push({ done: true });
+      }
+    } catch {
       continue;
     }
   }

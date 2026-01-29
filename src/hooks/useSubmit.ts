@@ -4,17 +4,17 @@ import { useTranslation } from 'react-i18next';
 import { ChatInterface, MessageInterface } from '@type/chat';
 import { ParsedStreamData } from '@type/api';
 import { getChatCompletion, getChatCompletionStream } from '@api/api';
-import { parseEventSource } from '@api/helper';
+import { parseEventSource, parseCompletionsEventSource } from '@api/helper';
 import { limitMessageTokens } from '@utils/messageUtils';
 import { _defaultChatConfig } from '@constants/chat';
-import { defaultTitleModel } from '@constants/config';
-import { defaultAPIEndpoint, defaultAPIKey } from '@constants/auth';
+import { defaultTitleModel, getModelConfig } from '@constants/config';
+import { responsesAPIEndpoint, defaultAPIKey } from '@constants/auth';
 
 const useSubmit = () => {
   const { t, i18n } = useTranslation('api');
   const error = useStore((state) => state.error);
   const setError = useStore((state) => state.setError);
-  const apiEndpoint = defaultAPIEndpoint;
+  const apiEndpoint = responsesAPIEndpoint;  // 仅作为占位符，实际端点由模型配置决定
   const apiKey = defaultAPIKey;
   const setGenerating = useStore((state) => state.setGenerating);
   const generating = useStore((state) => state.generating);
@@ -83,9 +83,13 @@ const useSubmit = () => {
 
         while (reading && useStore.getState().generating) {
           const { done, value } = await reader.read();
-          const result = parseEventSource(
-            partial + new TextDecoder().decode(value)
-          );
+
+          // 根据模型配置选择解析器
+          const modelConfig = getModelConfig(chats[currentChatIndex].config.model);
+          const isCompletions = modelConfig?.isCompletions;
+          const result = isCompletions
+            ? parseCompletionsEventSource(partial + new TextDecoder().decode(value))
+            : parseEventSource(partial + new TextDecoder().decode(value));
           partial = '';
 
           if (result === '[DONE]' || done) {

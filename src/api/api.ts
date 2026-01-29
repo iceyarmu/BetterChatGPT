@@ -1,6 +1,7 @@
-import { ShareGPTSubmitBodyInterface, ResponsesApiResponse } from '@type/api';
+import { ShareGPTSubmitBodyInterface, ResponsesApiResponse, ChatCompletionsResponse } from '@type/api';
 import { ConfigInterface, MessageInterface } from '@type/chat';
 import { getModelConfig } from '@constants/config';
+import { completionsAPIEndpoint, responsesAPIEndpoint } from '@constants/auth';
 
 // 从 Responses API 响应中提取内容
 const extractResponseContent = (data: ResponsesApiResponse): { content: string; reasoning?: string } => {
@@ -27,94 +28,119 @@ const extractResponseContent = (data: ResponsesApiResponse): { content: string; 
 };
 
 export const getChatCompletion = async (
-  endpoint: string,
+  _endpoint: string,
   messages: MessageInterface[],
   config: ConfigInterface,
   apiKey?: string,
   customHeaders?: Record<string, string>
 ) => {
+  const modelConfig = getModelConfig(config.model);
+  const model = modelConfig?.apiName || config.model;
+  const isCompletions = modelConfig?.isCompletions;
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...customHeaders,
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  // 分离 system message 作为 instructions
-  const systemMessages = messages.filter(m => m.role === 'system');
-  const inputMessages = messages.filter(m => m.role !== 'system');
+  if (isCompletions) {
+    // Chat Completions API
+    const response = await fetch(completionsAPIEndpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model,
+        messages: messages.map(m => ({ role: m.role, content: m.content })),
+      }),
+    });
 
-  // 从配置获取模型信息
-  const modelConfig = getModelConfig(config.model);
-  const model = modelConfig?.apiName || config.model;
-  const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
+    if (!response.ok) throw new Error(await response.text());
+    const data: ChatCompletionsResponse = await response.json();
+    return { content: data.choices[0]?.message?.content || '' };
+  } else {
+    // Responses API
+    const systemMessages = messages.filter(m => m.role === 'system');
+    const inputMessages = messages.filter(m => m.role !== 'system');
+    const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      model,
-      input: inputMessages.map(m => ({ role: m.role, content: m.content })),
-      instructions: systemMessages.length > 0
-        ? systemMessages.map(m => m.content).join('\n')
-        : undefined,
-      reasoning,
-    }),
-  });
+    const response = await fetch(responsesAPIEndpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model,
+        input: inputMessages.map(m => ({ role: m.role, content: m.content })),
+        instructions: systemMessages.length > 0
+          ? systemMessages.map(m => m.content).join('\n')
+          : undefined,
+        reasoning,
+      }),
+    });
 
-  if (!response.ok) throw new Error(await response.text());
-
-  const data: ResponsesApiResponse = await response.json();
-  return extractResponseContent(data);
+    if (!response.ok) throw new Error(await response.text());
+    const data: ResponsesApiResponse = await response.json();
+    return extractResponseContent(data);
+  }
 };
 
 export const getChatCompletionStream = async (
-  endpoint: string,
+  _endpoint: string,
   messages: MessageInterface[],
   config: ConfigInterface,
   apiKey?: string,
   customHeaders?: Record<string, string>
 ) => {
+  const modelConfig = getModelConfig(config.model);
+  const model = modelConfig?.apiName || config.model;
+  const isCompletions = modelConfig?.isCompletions;
+
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
     ...customHeaders,
   };
   if (apiKey) headers.Authorization = `Bearer ${apiKey}`;
 
-  // 分离 system message 作为 instructions
-  const systemMessages = messages.filter(m => m.role === 'system');
-  const inputMessages = messages.filter(m => m.role !== 'system');
+  let response: Response;
 
-  // 从配置获取模型信息
-  const modelConfig = getModelConfig(config.model);
-  const model = modelConfig?.apiName || config.model;
-  const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
+  if (isCompletions) {
+    // Chat Completions API
+    response = await fetch(completionsAPIEndpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model,
+        messages: messages.map(m => ({ role: m.role, content: m.content })),
+        stream: true,
+      }),
+    });
+  } else {
+    // Responses API
+    const systemMessages = messages.filter(m => m.role === 'system');
+    const inputMessages = messages.filter(m => m.role !== 'system');
+    const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
 
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers,
-    body: JSON.stringify({
-      model,
-      input: inputMessages.map(m => ({ role: m.role, content: m.content })),
-      instructions: systemMessages.length > 0
-        ? systemMessages.map(m => m.content).join('\n')
-        : undefined,
-      stream: true,
-      reasoning,
-    }),
-  });
+    response = await fetch(responsesAPIEndpoint, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        model,
+        input: inputMessages.map(m => ({ role: m.role, content: m.content })),
+        instructions: systemMessages.length > 0
+          ? systemMessages.map(m => m.content).join('\n')
+          : undefined,
+        stream: true,
+        reasoning,
+      }),
+    });
+  }
 
+  // 错误处理
   if (response.status === 404 || response.status === 405) {
     const text = await response.text();
-
     if (text.includes('model_not_found')) {
-      throw new Error(
-        text +
-          '\nMessage from ChatGPT:\nPlease ensure that you have access to the GPT-4 API!'
-      );
+      throw new Error(text + '\nPlease ensure that you have access to this model!');
     } else {
-      throw new Error(
-        'Message from ChatGPT:\nInvalid API endpoint! We recommend you to check your free API endpoint.'
-      );
+      throw new Error('Invalid API endpoint!');
     }
   }
 
@@ -122,16 +148,14 @@ export const getChatCompletionStream = async (
     const text = await response.text();
     let error = text;
     if (text.includes('insufficient_quota')) {
-      error +=
-        '\nMessage from ChatGPT:\nWe recommend changing your API endpoint or API key';
+      error += '\nInsufficient quota. Please check your API key.';
     } else if (response.status === 429) {
       error += '\nRate limited!';
     }
     throw new Error(error);
   }
 
-  const stream = response.body;
-  return stream;
+  return response.body;
 };
 
 export const submitShareGPT = async (body: ShareGPTSubmitBodyInterface) => {
