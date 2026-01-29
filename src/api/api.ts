@@ -104,7 +104,7 @@ export const getChatCompletionStream = async (
   // }
   const include_reasoning = config.model === 'deepseek-r1' ? true : undefined;
   const reasoning_effort = config.model.startsWith('gpt') && config.model.endsWith('-thinking') ? 'high' : undefined;
-  const reasoning = config.model.startsWith('claude') && config.model.endsWith('-thinking') ? {'max_tokens': 32000} : undefined;
+  // const reasoning = config.model.startsWith('claude') && config.model.endsWith('-thinking') ? {'max_tokens': 32000} : undefined;
 
   // 排除 top_p 和 temperature
   const { top_p: _top_p, temperature: _temperature, ...restConfig } = config;
@@ -128,7 +128,7 @@ export const getChatCompletionStream = async (
       stream: true,
       include_reasoning,
       reasoning_effort,
-      reasoning,
+      // reasoning,
     }),
   });
   if (response.status === 404 || response.status === 405) {
