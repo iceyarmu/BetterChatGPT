@@ -7,7 +7,6 @@ import useSubmit from '@hooks/useSubmit';
 import { ChatInterface } from '@type/chat';
 
 import PopupModal from '@components/PopupModal';
-import TokenCount from '@components/TokenCount';
 import CommandPrompt from '../CommandPrompt';
 
 const EditView = ({
@@ -238,7 +237,6 @@ const EditViewButtons = memo(
             </button>
           )}
         </div>
-        {sticky && advancedMode && <TokenCount />}
         <CommandPrompt _setContent={_setContent} />
       </div>
     );

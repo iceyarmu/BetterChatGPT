@@ -1,6 +1,4 @@
-import { MessageInterface, ModelOptions, TotalTokenUsed } from '@type/chat';
-
-import useStore from '@store/store';
+import { MessageInterface, ModelOptions } from '@type/chat';
 
 import { Tiktoken } from '@dqbd/tiktoken/lite';
 const cl100k_base = await import('@dqbd/tiktoken/encoders/cl100k_base.json');
@@ -29,23 +27,17 @@ export const getChatGPTEncoding = (
   messages: MessageInterface[],
   model: ModelOptions
 ) => {
-  const isGpt3 = false;//model === 'gpt-3.5-turbo' || model === 'gpt-3.5-turbo-16k';
+  const msgSep = '';
+  const roleSep = '<|im_sep|>';
 
-  const msgSep = isGpt3 ? '\n' : '';
-  const roleSep = isGpt3 ? '\n' : '<|im_sep|>';
-
-  const serialized = //[
-    messages
-      .map(({ role, content }) => {
-        return `<|im_start|>${role}${roleSep}${content}<|im_end|>`;
-      })
-      .join(msgSep);//,
-    // `<|im_start|>assistant${roleSep}`,
-  // ].join(msgSep);
+  const serialized = messages
+    .map(({ role, content }) => {
+      return `<|im_start|>${role}${roleSep}${content}<|im_end|>`;
+    })
+    .join(msgSep);
 
   return encoder.encode(serialized, 'all');
 };
-
 
 const countTokens = (messages: MessageInterface[], model: ModelOptions) => {
   if (messages.length === 0) return 0;
@@ -53,52 +45,9 @@ const countTokens = (messages: MessageInterface[], model: ModelOptions) => {
   return getChatGPTEncoding(messagesWithoutThink, model).length;
 }
 
-export const countCurrentTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
-  if (messages.length === 0) return [0,0];
-  let roundMessages = messages.slice(-6).slice(0, -1);
-  let promptTokens = getChatGPTEncoding(roundMessages, model).length + 49;
-  let completionTokens = getChatGPTEncoding([messages[messages.length-1]], model).length - 4;
-  return [promptTokens, completionTokens];
-};
-
-export const countTotalTokens = (messages: MessageInterface[], model: ModelOptions) : number[] => {
-  if (messages.length === 0) return [0,0];
-  let promptTokens = 0;
-  let completionTokens = 0;
-  let roundMessages = [];
-  for (let i = 0; i < messages.length; i++) {
-    const message = messages[i];
-    roundMessages.push(message);
-    if (message.role === 'assistant') {
-      const [prompt, completion] = countCurrentTokens(roundMessages, model);
-      promptTokens += prompt;
-      completionTokens += completion;
-    }
-  }
-  return [promptTokens, completionTokens];
-};
-
-const genSystemMessage = () : MessageInterface => {
-  const date = new Date();
-  const dateString =
-    date.getFullYear() +
-    '-' +
-    ('0' + (date.getMonth() + 1)).slice(-2) +
-    '-' +
-    ('0' + date.getDate()).slice(-2) +
-    ' ' +
-    ('0' + date.getHours()).slice(-2) +
-    ':' +
-    ('0' + date.getMinutes()).slice(-2);
-  return {
-    role: 'system',
-    content: "You are ChatGPT 5, a large language model trained by OpenAI. Carefully heed the user's instructions. Respond using Markdown. Current time: " + dateString 
-  }
-}
-
 export const limitMessageTokens = (
   messages: MessageInterface[],
-  limit: number = 4096,
+  limit: number = 100000,
   model: ModelOptions
 ): MessageInterface[] => {
   const limitedMessages: MessageInterface[] = [];
@@ -141,26 +90,6 @@ export const limitMessageTokens = (
   }
 
   return limitedMessages;
-};
-
-export const updateTotalTokenUsed = ( 
-  model: ModelOptions,
-  messages: MessageInterface[]
-) => {
-  const setTotalTokenUsed = useStore.getState().setTotalTokenUsed;
-  const updatedTotalTokenUsed: TotalTokenUsed = JSON.parse(
-    JSON.stringify(useStore.getState().totalTokenUsed)
-  );
-
-  const [newPromptTokens, newCompletionTokens] = countCurrentTokens(messages, model);
-  const { promptTokens = 0, completionTokens = 0 } =
-    updatedTotalTokenUsed[model] ?? {};
-
-  updatedTotalTokenUsed[model] = {
-    promptTokens: promptTokens + newPromptTokens,
-    completionTokens: completionTokens + newCompletionTokens,
-  };
-  setTotalTokenUsed(updatedTotalTokenUsed);
 };
 
 export default countTokens;

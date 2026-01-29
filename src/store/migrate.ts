@@ -15,7 +15,6 @@ import {
 import {
   _defaultChatConfig,
   defaultModel,
-  defaultUserMaxToken,
   modelOptions,
 } from '@constants/chat';
 import { officialAPIEndpoint } from '@constants/auth';
@@ -38,13 +37,6 @@ export const migrateV1 = (persistedState: LocalStorageInterfaceV1ToV2) => {
 };
 
 export const migrateV2 = (persistedState: LocalStorageInterfaceV2ToV3) => {
-  persistedState.chats.forEach((chat) => {
-    chat.config = {
-      ...chat.config,
-      top_p: _defaultChatConfig.top_p,
-      frequency_penalty: _defaultChatConfig.frequency_penalty,
-    };
-  });
   persistedState.autoTitle = false;
 };
 
@@ -62,12 +54,7 @@ export const migrateV4 = (persistedState: LocalStorageInterfaceV4ToV5) => {
 };
 
 export const migrateV5 = (persistedState: LocalStorageInterfaceV5ToV6) => {
-  persistedState.chats.forEach((chat) => {
-    chat.config = {
-      ...chat.config,
-      max_tokens: defaultUserMaxToken,
-    };
-  });
+  // Previously set max_tokens, now removed
 };
 
 export const migrateV6 = (persistedState: LocalStorageInterfaceV6ToV7) => {
@@ -114,14 +101,12 @@ export const migrateV8 = (persistedState: LocalStorageInterfaceV7oV8) => {
 
 export const migrateV10 = (persistedState: LocalStorageInterfaceV7oV8) => {
   persistedState.defaultChatConfig.model = defaultModel;
-  persistedState.defaultChatConfig.max_tokens = 4096;
 };
 
 export const migrateV12 = (persistedState: LocalStorageInterfaceV7oV8) => {
   if (persistedState.defaultChatConfig.model === 'gpt-4o' || persistedState.defaultChatConfig.model === 'gpt-4.1') {
     persistedState.defaultChatConfig.model = defaultModel;
   }
-  persistedState.defaultChatConfig.max_tokens = 400000;
 };
 
 export const fix11 = (persistedState: StoreState) => {

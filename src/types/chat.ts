@@ -21,11 +21,6 @@ export interface ChatInterface {
 
 export interface ConfigInterface {
   model: ModelOptions;
-  max_tokens: number;
-  temperature: number;
-  presence_penalty: number;
-  top_p: number;
-  frequency_penalty: number;
 }
 
 export interface ChatHistoryInterface {
@@ -71,12 +66,6 @@ export type ModelOptions =
   'grok-4.1-fast'
   ;
 
-export type TotalTokenUsed = {
-  [model in ModelOptions]?: {
-    promptTokens: number;
-    completionTokens: number;
-  };
-};
 export interface LocalStorageInterfaceV0ToV1 {
   chats: ChatInterface[];
   currentChatIndex: number;

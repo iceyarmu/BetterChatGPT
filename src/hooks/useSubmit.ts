@@ -5,8 +5,8 @@ import { ChatInterface, MessageInterface } from '@type/chat';
 import { ParsedStreamData } from '@type/api';
 import { getChatCompletion, getChatCompletionStream } from '@api/api';
 import { parseEventSource } from '@api/helper';
-import { limitMessageTokens, updateTotalTokenUsed } from '@utils/messageUtils';
-import { _defaultChatConfig, modelMaxToken } from '@constants/chat';
+import { limitMessageTokens } from '@utils/messageUtils';
+import { _defaultChatConfig } from '@constants/chat';
 import { defaultAPIEndpoint, defaultAPIKey } from '@constants/auth';
 
 const useSubmit = () => {
@@ -58,7 +58,7 @@ const useSubmit = () => {
 
       const messages = limitMessageTokens(
         chats[currentChatIndex].messages,
-        modelMaxToken[chats[currentChatIndex].config.model],
+        100000,
         chats[currentChatIndex].config.model
       );
       if (messages.length === 0) throw new Error('Message exceed max token!');
@@ -138,20 +138,8 @@ const useSubmit = () => {
         stream.cancel();
       }
 
-      // update tokens used in chatting
-      const currChats = useStore.getState().chats;
-      const countTotalTokens = useStore.getState().countTotalTokens;
-
-      if (currChats && countTotalTokens) {
-        const model = currChats[currentChatIndex].config.model;
-        const messages = currChats[currentChatIndex].messages;
-        updateTotalTokenUsed(
-          model,
-          messages
-        );
-      }
-
       // generate title for new chats
+      const currChats = useStore.getState().chats;
       if (
         useStore.getState().autoTitle &&
         currChats &&
@@ -185,15 +173,6 @@ const useSubmit = () => {
         updatedChats[currentChatIndex].title = title;
         updatedChats[currentChatIndex].titleSet = true;
         setChats(updatedChats);
-
-        // update tokens used for generating title
-        if (countTotalTokens) {
-          const model = 'gpt-5-nano';
-          updateTotalTokenUsed(model, [message, {
-            role: 'assistant',
-            content: title,
-          }]);
-        }
       }
     } catch (e: unknown) {
       const err = (e as Error).message;
