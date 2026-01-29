@@ -102,6 +102,11 @@ const ReasoningBlock = memo(({ reasoning, isGenerating }: ReasoningBlockProps) =
           <div className='prose prose-sm dark:prose-invert max-w-none opacity-80'>
             <ReactMarkdown>{reasoning}</ReactMarkdown>
           </div>
+          {isGenerating && (
+            <div className='mt-3 italic opacity-60'>
+              {t('thinking')}{'.'.repeat(dotCount)}
+            </div>
+          )}
         </div>
       )}
     </div>
