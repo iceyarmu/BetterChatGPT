@@ -3,7 +3,6 @@ import React, {
   HTMLAttributes,
   memo,
   useState,
-  useEffect,
 } from 'react';
 
 import ReactMarkdown from 'react-markdown';
@@ -31,9 +30,9 @@ import CopyButton from './Button/CopyButton';
 import EditButton from './Button/EditButton';
 import DeleteButton from './Button/DeleteButton';
 import MarkdownModeButton from './Button/MarkdownModeButton';
+import ReasoningBlock from './ReasoningBlock';
 
 import CodeBlock from '../CodeBlock';
-import { useTranslation } from 'react-i18next';
 
 const ContentView = memo(
   ({
@@ -50,10 +49,8 @@ const ContentView = memo(
     reasoning?: string;
   }) => {
     const { handleSubmit } = useSubmit();
-    const { t } = useTranslation();
 
     const [isDelete, setIsDelete] = useState<boolean>(false);
-    const [dotCount, setDotCount] = useState<number>(1);
 
     const currentChatIndex = useStore((state) => state.currentChatIndex);
     const setChats = useStore((state) => state.setChats);
@@ -63,15 +60,6 @@ const ContentView = memo(
     const inlineLatex = useStore((state) => state.inlineLatex);
     const markdownMode = useStore((state) => state.markdownMode);
     const generating = useStore((state) => state.generating);
-    
-    useEffect(() => {
-      if (generating) {
-        const timer = setInterval(() => {
-          setDotCount(prev => prev >= 6 ? 1 : prev + 1);
-        }, 500);
-        return () => clearInterval(timer);
-      }
-    }, [generating]);
 
     const handleDelete = () => {
       const updatedChats: ChatInterface[] = JSON.parse(
@@ -119,27 +107,22 @@ const ContentView = memo(
       navigator.clipboard.writeText(content);
     };
 
-    const transformContent = () => (text: string, reasoning?: string): string => {
-      if (reasoning && reasoning.trim() !== '') {
-        reasoning = "\n" + reasoning.trim();
-        reasoning = reasoning.replace(/\n/g, '\n>');
-      } else {
-        reasoning = '';
-      }
-      if (text && text.indexOf('<think>') !== -1) {
-        text = text.replace(/<think>([\s\S]*?)(<\/think>|$)/g, (_, content) => {
-          return content.replace(/\n/g, '\n>');
-        });
-      }
-      const result = reasoning + text;
-      if (!result && generating) {
-        return '*' + t('thinking') + '.'.repeat(dotCount) + '*';
-      }
-      return result;
-    };
+    const showReasoningBlock = role === 'assistant' && (
+      (reasoning && reasoning.trim() !== '') ||
+      (generating && messageIndex === lastMessageIndex && !content)
+    );
 
     return (
       <>
+        {/* Reasoning Block */}
+        {showReasoningBlock && (
+          <ReasoningBlock
+            reasoning={reasoning || ''}
+            isGenerating={generating && messageIndex === lastMessageIndex}
+          />
+        )}
+
+        {/* Content */}
         <div className='markdown prose w-full md:max-w-full break-words dark:prose-invert dark share-gpt-message'>
           {markdownMode ? (
             <ReactMarkdown
@@ -164,12 +147,10 @@ const ContentView = memo(
                 p,
               }}
             >
-              {transformContent()(content, reasoning)}
+              {content}
             </ReactMarkdown>
           ) : (
-            <span className='whitespace-pre-wrap'>
-              {transformContent()(content, reasoning)}
-            </span>
+            <span className='whitespace-pre-wrap'>{content}</span>
           )}
         </div>
         <div className='flex justify-end gap-2 w-full mt-2'>
