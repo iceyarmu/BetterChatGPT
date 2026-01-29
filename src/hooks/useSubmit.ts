@@ -5,7 +5,7 @@ import { ChatInterface, MessageInterface } from '@type/chat';
 import { ParsedStreamData } from '@type/api';
 import { getChatCompletion, getChatCompletionStream } from '@api/api';
 import { parseEventSource, parseCompletionsEventSource } from '@api/helper';
-import { limitMessageTokens } from '@utils/messageUtils';
+import { limitMessages } from '@utils/messageUtils';
 import { _defaultChatConfig } from '@constants/chat';
 import { defaultTitleModel, getModelConfig } from '@constants/config';
 import { responsesAPIEndpoint, defaultAPIKey } from '@constants/auth';
@@ -57,11 +57,7 @@ const useSubmit = () => {
       if (chats[currentChatIndex].messages.length === 0)
         throw new Error('No messages submitted!');
 
-      const messages = limitMessageTokens(
-        chats[currentChatIndex].messages,
-        100000,
-        chats[currentChatIndex].config.model
-      );
+      const messages = limitMessages(chats[currentChatIndex].messages);
       if (messages.length === 0) throw new Error('Message exceed max token!');
 
       // 获取流式响应
