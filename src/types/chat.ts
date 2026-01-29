@@ -1,5 +1,7 @@
 import { Prompt } from './prompt';
 import { Theme } from './theme';
+import { ModelOptions, ModelConfig } from '@constants/config';
+export type { ModelOptions, ModelConfig };
 
 export type Role = 'user' | 'assistant' | 'system';
 export const roles: Role[] = ['user', 'assistant', 'system'];
@@ -44,27 +46,6 @@ export interface Folder {
   order: number;
   color?: string;
 }
-
-//这里注册所有可请求的模型列表
-export type ModelOptions =
-  'gpt-5.2' |
-  'gpt-5.2-thinking' |
-  'gpt-5.2-chat-latest' |
-  'gpt-5' |
-  'gpt-5-nano' |
-  'gpt-4.1' |
-  'gpt-4.1-nano' |
-  'gpt-4o' |
-  'gpt-4o-mini' |
-  'o3' |
-  'o4-mini-high' |
-  'claude-opus-4-5-thinking' |
-  'claude-sonnet-4-5-thinking' |
-  'deepseek-r1' |
-  'gemini-3-pro' |
-  'grok-4' |
-  'grok-4.1-fast'
-  ;
 
 export interface LocalStorageInterfaceV0ToV1 {
   chats: ChatInterface[];

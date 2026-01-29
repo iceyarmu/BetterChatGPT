@@ -1,5 +1,6 @@
 import { ShareGPTSubmitBodyInterface, ResponsesApiResponse } from '@type/api';
 import { ConfigInterface, MessageInterface } from '@type/chat';
+import { getModelConfig } from '@constants/config';
 
 // 从 Responses API 响应中提取内容
 const extractResponseContent = (data: ResponsesApiResponse): { content: string; reasoning?: string } => {
@@ -25,21 +26,6 @@ const extractResponseContent = (data: ResponsesApiResponse): { content: string; 
   return { content, reasoning: reasoning || undefined };
 };
 
-// 模型名称映射
-const mapModelName = (model: string): string => {
-  if (model === 'gpt-5.2') {
-    return 'gpt-5.2-chat-latest';
-  } else if (model === 'gpt-5.2-thinking') {
-    return 'gpt-5.2';
-  }
-  return model;
-};
-
-// 判断是否为 thinking 模型
-const isThinkingModel = (model: string): boolean => {
-  return model.endsWith('-thinking') || model === 'deepseek-r1';
-};
-
 export const getChatCompletion = async (
   endpoint: string,
   messages: MessageInterface[],
@@ -57,7 +43,10 @@ export const getChatCompletion = async (
   const systemMessages = messages.filter(m => m.role === 'system');
   const inputMessages = messages.filter(m => m.role !== 'system');
 
-  const model = mapModelName(config.model);
+  // 从配置获取模型信息
+  const modelConfig = getModelConfig(config.model);
+  const model = modelConfig?.apiName || config.model;
+  const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -68,7 +57,7 @@ export const getChatCompletion = async (
       instructions: systemMessages.length > 0
         ? systemMessages.map(m => m.content).join('\n')
         : undefined,
-      reasoning: isThinkingModel(config.model) ? { effort: 'minimal' } : undefined,
+      reasoning,
     }),
   });
 
@@ -95,7 +84,10 @@ export const getChatCompletionStream = async (
   const systemMessages = messages.filter(m => m.role === 'system');
   const inputMessages = messages.filter(m => m.role !== 'system');
 
-  const model = mapModelName(config.model);
+  // 从配置获取模型信息
+  const modelConfig = getModelConfig(config.model);
+  const model = modelConfig?.apiName || config.model;
+  const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
 
   const response = await fetch(endpoint, {
     method: 'POST',
@@ -107,7 +99,7 @@ export const getChatCompletionStream = async (
         ? systemMessages.map(m => m.content).join('\n')
         : undefined,
       stream: true,
-      reasoning: isThinkingModel(config.model) ? { effort: 'high' } : undefined,
+      reasoning,
     }),
   });
 

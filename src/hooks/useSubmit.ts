@@ -7,6 +7,7 @@ import { getChatCompletion, getChatCompletionStream } from '@api/api';
 import { parseEventSource } from '@api/helper';
 import { limitMessageTokens } from '@utils/messageUtils';
 import { _defaultChatConfig } from '@constants/chat';
+import { defaultTitleModel } from '@constants/config';
 import { defaultAPIEndpoint, defaultAPIKey } from '@constants/auth';
 
 const useSubmit = () => {
@@ -24,7 +25,7 @@ const useSubmit = () => {
     message: MessageInterface[]
   ): Promise<string> => {
     let config = {..._defaultChatConfig};
-    config.model = 'gpt-5-nano';
+    config.model = defaultTitleModel;
 
     // getChatCompletion 现在返回 { content, reasoning }
     const result = await getChatCompletion(

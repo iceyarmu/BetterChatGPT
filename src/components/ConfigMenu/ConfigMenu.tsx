@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import PopupModal from '@components/PopupModal';
 import { ConfigInterface, ModelOptions } from '@type/chat';
 import DownChevronArrow from '@icon/DownChevronArrow';
-import { modelOptions } from '@constants/chat';
+import { getVisibleModels, getModelConfig } from '@constants/config';
 
 const ConfigMenu = ({
   setIsModalOpen,
@@ -46,6 +46,8 @@ export const ModelSelector = ({
   _setModel: React.Dispatch<React.SetStateAction<ModelOptions>>;
 }) => {
   const [dropDown, setDropDown] = useState<boolean>(false);
+  const visibleModels = getVisibleModels();
+  const currentConfig = getModelConfig(_model);
 
   return (
     <div className='mb-4'>
@@ -55,7 +57,7 @@ export const ModelSelector = ({
         onClick={() => setDropDown((prev) => !prev)}
         aria-label='model'
       >
-        {_model}
+        {currentConfig?.displayName || _model}
         <DownChevronArrow />
       </button>
       <div
@@ -68,16 +70,16 @@ export const ModelSelector = ({
           className='text-sm text-gray-700 dark:text-gray-200 p-0 m-0'
           aria-labelledby='dropdownDefaultButton'
         >
-          {modelOptions.map((m) => (
+          {visibleModels.map((m) => (
             <li
               className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer'
               onClick={() => {
-                _setModel(m);
+                _setModel(m.modelName);
                 setDropDown(false);
               }}
-              key={m}
+              key={m.modelName}
             >
-              {m}
+              {m.displayName || m.modelName}
             </li>
           ))}
         </ul>
