@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import DownChevronArrow from '@icon/DownChevronArrow';
-import { languageCodeToName, selectableLanguages } from '@constants/language';
+import { languageCodeToName, i18nLanguages } from '@constants/language';
 
 const LanguageSelector = () => {
   const { i18n } = useTranslation();
@@ -30,7 +30,7 @@ const LanguageSelector = () => {
           className='text-sm text-gray-700 dark:text-gray-200 p-0 m-0 max-h-72 overflow-auto'
           aria-labelledby='dropdownDefaultButton'
         >
-          {selectableLanguages.map((lang) => (
+          {i18nLanguages.map((lang) => (
             <li
               className='px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer'
               onClick={() => {
