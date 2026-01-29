@@ -62,7 +62,13 @@ export const getChatCompletion = async (
     // Responses API
     const systemMessages = messages.filter(m => m.role === 'system');
     const inputMessages = messages.filter(m => m.role !== 'system');
-    const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
+    const reasoning = modelConfig?.reasoning
+      ? {
+          effort: modelConfig.reasoning,
+          ...(modelConfig.reasoning !== 'none' &&
+            modelConfig.reasoning !== 'minimal' && { summary: 'auto' }),
+        }
+      : undefined;
 
     const response = await fetch(responsesAPIEndpoint, {
       method: 'POST',
@@ -121,7 +127,13 @@ export const getChatCompletionStream = async (
     // Responses API
     const systemMessages = messages.filter(m => m.role === 'system');
     const inputMessages = messages.filter(m => m.role !== 'system');
-    const reasoning = modelConfig?.reasoning ? { effort: modelConfig.reasoning } : undefined;
+    const reasoning = modelConfig?.reasoning
+      ? {
+          effort: modelConfig.reasoning,
+          ...(modelConfig.reasoning !== 'none' &&
+            modelConfig.reasoning !== 'minimal' && { summary: 'auto' }),
+        }
+      : undefined;
 
     response = await fetch(responsesAPIEndpoint, {
       method: 'POST',
