@@ -7,6 +7,8 @@ const convertToUnifiedFormat = (event: ResponsesStreamEvent): ParsedStreamData |
       return { content: event.delta };
 
     case 'response.reasoning.delta':
+    case 'response.reasoning_text.delta':
+    case 'response.reasoning_summary_text.delta':
       return { reasoning: event.delta };
 
     case 'response.completed':

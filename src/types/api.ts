@@ -9,6 +9,12 @@ export type ResponsesStreamEventType =
   | 'response.output_text.done'
   | 'response.reasoning.delta'
   | 'response.reasoning.done'
+  | 'response.reasoning_text.delta'
+  | 'response.reasoning_text.done'
+  | 'response.reasoning_summary_text.delta'
+  | 'response.reasoning_summary_text.done'
+  | 'response.reasoning_summary_part.added'
+  | 'response.reasoning_summary_part.done'
   | 'response.completed'
   | 'response.failed'
   | 'error';
