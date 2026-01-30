@@ -12,20 +12,19 @@ interface ModelConfigBase {
 export const ModelConfigs = [
   {
     modelName: 'gpt-5.2',
-    apiName: 'gpt-5.2-chat-latest-corp',
+    apiName: 'gpt-5.2-chat-latest',
     reasoning: 'none',
     displayName: 'GPT 5.2',
   },
   {
     modelName: 'gpt-5.2-thinking',
-    apiName: 'gpt-5.2-corp',
+    apiName: 'gpt-5.2',
     reasoning: 'high',
     webSearch: 'low',
     displayName: 'GPT 5.2 Thinking',
   },
   {
     modelName: 'gpt-5-nano',
-    apiName: 'gpt-5-nano-corp',
     reasoning: 'minimal',
   },
   {
@@ -39,13 +38,11 @@ export const ModelConfigs = [
   {
     modelName: 'claude-opus-4-5',
     apiName: 'claude-opus-4-5-thinking',
-    isCompletions: true,
     displayName: 'Claude Opus 4.5',
   },
   {
     modelName: 'claude-sonnet-4-5',
     apiName: 'claude-sonnet-4-5-thinking',
-    isCompletions: true,
     displayName: 'Claude Sonnet 4.5',
   },
   {
@@ -55,13 +52,10 @@ export const ModelConfigs = [
   {
     modelName: 'gemini-3-pro',
     apiName: 'gemini-3-pro-preview-thinking',
-    isCompletions: true,
     displayName: 'Gemini 3 Pro',
   },
   {
     modelName: 'gemini-2.5-flash-lite',
-    apiName: 'gemini-2.5-flash-lite',
-    isCompletions: true,
   },
   {
     modelName: 'grok-4.1-fast',
