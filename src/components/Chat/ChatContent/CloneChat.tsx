@@ -34,7 +34,7 @@ const CloneChat = React.memo(() => {
       updatedChats.unshift(clonedChat);
 
       setChats(updatedChats);
-      setCurrentChatIndex(useStore.getState().currentChatIndex + 1);
+      setCurrentChatIndex(0);
       setCloned(true);
 
       window.setTimeout(() => {
