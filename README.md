@@ -64,7 +64,6 @@ Better ChatGPT comes with a bundle of amazing features! Here are some of them:
 - Organize chats into folders (with colours)
 - Filter chats and folders
 - Token count and pricing
-- ShareGPT integration
 - Custom model parameters (e.g. presence_penalty)
 - Chat as user / assistant / system
 - Edit, reorder and insert any messages, anywhere

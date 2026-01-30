@@ -113,13 +113,3 @@ export interface ChatCompletionsResponse {
     total_tokens: number;
   };
 }
-
-// ========== ShareGPT Types ==========
-
-export interface ShareGPTSubmitBodyInterface {
-  avatarUrl: string;
-  items: {
-    from: 'gpt' | 'human';
-    value: string;
-  }[];
-}

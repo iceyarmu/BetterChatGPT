@@ -158,7 +158,7 @@ const ContentView = memo(
         )}
 
         {/* Content */}
-        <div className='markdown prose w-full md:max-w-full break-words dark:prose-invert dark share-gpt-message'>
+        <div className='markdown prose w-full md:max-w-full break-words dark:prose-invert dark'>
           {markdownMode ? (
             <ReactMarkdown
               remarkPlugins={[
