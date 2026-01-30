@@ -9,6 +9,8 @@ import { ChatInterface } from '@type/chat';
 import PopupModal from '@components/PopupModal';
 import CommandPrompt from '../CommandPrompt';
 
+const DRAFT_STORAGE_KEY = 'chat-input-draft';
+
 const EditView = ({
   content,
   setIsEdit,
@@ -24,7 +26,14 @@ const EditView = ({
   const setChats = useStore((state) => state.setChats);
   const currentChatIndex = useStore((state) => state.currentChatIndex);
 
-  const [_content, _setContent] = useState<string>(content);
+  const [_content, _setContent] = useState<string>(() => {
+    // sticky 模式下尝试恢复草稿
+    if (sticky && !content) {
+      const draft = localStorage.getItem(DRAFT_STORAGE_KEY);
+      return draft || '';
+    }
+    return content;
+  });
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const textareaRef = React.createRef<HTMLTextAreaElement>();
 
@@ -71,6 +80,7 @@ const EditView = ({
     if (sticky) {
       updatedMessages.push({ role: inputRole, content: _content });
       _setContent('');
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
       resetTextAreaHeight();
     } else {
       updatedMessages[messageIndex].content = _content;
@@ -91,6 +101,7 @@ const EditView = ({
         updatedMessages.push({ role: inputRole, content: _content });
       }
       _setContent('');
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
       resetTextAreaHeight();
     } else {
       updatedMessages[messageIndex].content = _content;
@@ -131,7 +142,16 @@ const EditView = ({
           ref={textareaRef}
           className='m-0 resize-none rounded-lg bg-transparent overflow-y-hidden focus:ring-0 focus-visible:ring-0 leading-7 w-full placeholder:text-gray-500/40'
           onChange={(e) => {
-            _setContent(e.target.value);
+            const value = e.target.value;
+            _setContent(value);
+            // 实时保存草稿
+            if (sticky) {
+              if (value) {
+                localStorage.setItem(DRAFT_STORAGE_KEY, value);
+              } else {
+                localStorage.removeItem(DRAFT_STORAGE_KEY);
+              }
+            }
           }}
           value={_content}
           placeholder={t('submitPlaceholder') as string}
