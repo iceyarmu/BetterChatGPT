@@ -13,7 +13,7 @@ interface ReasoningBlockProps {
 
 const ReasoningBlock = memo(({ reasoning, isGenerating }: ReasoningBlockProps) => {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [isExpanded, setIsExpanded] = useState<boolean>(isGenerating ?? false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [dotCount, setDotCount] = useState<number>(1);
 
@@ -23,6 +23,13 @@ const ReasoningBlock = memo(({ reasoning, isGenerating }: ReasoningBlockProps) =
         setDotCount(prev => prev >= 6 ? 1 : prev + 1);
       }, 500);
       return () => clearInterval(timer);
+    }
+  }, [isGenerating]);
+
+  // 当停止生成时（正文开始生成），自动折叠
+  useEffect(() => {
+    if (!isGenerating && reasoning) {
+      setIsExpanded(false);
     }
   }, [isGenerating]);
 
