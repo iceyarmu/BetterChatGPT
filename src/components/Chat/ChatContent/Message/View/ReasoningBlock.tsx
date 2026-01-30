@@ -69,7 +69,7 @@ const ReasoningBlock = memo(({ reasoning, isGenerating }: ReasoningBlockProps) =
             className={`transition-transform duration-200 ${isExpanded ? '' : '-rotate-90'}`}
           />
           <span className='font-medium'>
-            {isGenerating ? (
+            {isGenerating && !hasContent ? (
               <>{t('thinking')}{'.'.repeat(dotCount)}</>
             ) : (
               t('thinkingBlock')

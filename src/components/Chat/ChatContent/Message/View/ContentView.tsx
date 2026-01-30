@@ -118,7 +118,7 @@ const ContentView = memo(
         {showReasoningBlock && (
           <ReasoningBlock
             reasoning={reasoning || ''}
-            isGenerating={generating && messageIndex === lastMessageIndex}
+            isGenerating={generating && messageIndex === lastMessageIndex && !content}
           />
         )}
 
