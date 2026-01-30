@@ -34,6 +34,41 @@ import ReasoningBlock from './ReasoningBlock';
 
 import CodeBlock from '../CodeBlock';
 
+// 预处理 LaTeX 分隔符：将 \[...\] 转为 $$...$$，将 \(...\) 转为 $...$
+// 跳过代码块以避免误处理
+const preprocessLatex = (content: string): string => {
+  // 使用时间戳占位符，避免与原文冲突
+  const placeholder = `__CODEBLOCK_${Date.now()}_`;
+  const codeBlocks: string[] = [];
+
+  // 保护代码块：支持 3+ 个反引号的代码块和内联代码
+  let processed = content.replace(/(`{3,})[\s\S]*?\1|`[^`]*`/g, (match) => {
+    codeBlocks.push(match);
+    return `${placeholder}${codeBlocks.length - 1}__`;
+  });
+
+  // 转换 LaTeX 分隔符
+  // 注意：不使用 lookbehind (?<!\\) 以保证浏览器兼容性（Safari < 16.4）
+  // \[...\] → $$...$$（跳过 \\[ 即 LaTeX 换行符）
+  processed = processed.replace(/(?:^|[^\\])\\\[([\s\S]*?)\\\]/g, (match, p1) => {
+    const prefix = match.startsWith('\\[') ? '' : match[0];
+    return `${prefix}$$${p1}$$`;
+  });
+  // \(...\) → $...$
+  processed = processed.replace(/(?:^|[^\\])\\\(([\s\S]*?)\\\)/g, (match, p1) => {
+    const prefix = match.startsWith('\\(') ? '' : match[0];
+    return `${prefix}$${p1}$`;
+  });
+
+  // 恢复代码块
+  const placeholderRegex = new RegExp(`${placeholder}(\\d+)__`, 'g');
+  processed = processed.replace(placeholderRegex, (_, index) => {
+    return codeBlocks[parseInt(index)];
+  });
+
+  return processed;
+};
+
 const ContentView = memo(
   ({
     role,
@@ -147,7 +182,7 @@ const ContentView = memo(
                 p,
               }}
             >
-              {content}
+              {preprocessLatex(content)}
             </ReactMarkdown>
           ) : (
             <span className='whitespace-pre-wrap'>{content}</span>
