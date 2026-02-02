@@ -14,11 +14,19 @@ const CommandPrompt = ({
 }) => {
   const { t } = useTranslation();
   const prompts = useStore((state) => state.prompts);
+  const chats = useStore((state) => state.chats);
+  const currentChatIndex = useStore((state) => state.currentChatIndex);
   const [_prompts, _setPrompts] = useState<Prompt[]>(prompts);
   const [input, setInput] = useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [dropDown, setDropDown, dropDownRef] = useHideOnOutsideClick();
+
+  // 判断上下文是否有内容
+  const currentMessages = chats?.[currentChatIndex]?.messages || [];
+  const hasContent = currentMessages.length > 0;
+  // 动态定位：有内容时菜单在上方，无内容时菜单在下方
+  const positionClass = hasContent ? 'bottom-full mb-1' : 'top-100 bottom-100';
 
   useEffect(() => {
     if (dropDown && inputRef.current) {
@@ -51,7 +59,7 @@ const CommandPrompt = ({
       <div
         className={`${
           dropDown ? '' : 'hidden'
-        } absolute top-100 bottom-100 right-0 z-10 bg-white rounded-lg shadow-xl border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800 opacity-90`}
+        } absolute ${positionClass} right-0 z-10 bg-white rounded-lg shadow-xl border-b border-black/10 dark:border-gray-900/50 text-gray-800 dark:text-gray-100 group dark:bg-gray-800 opacity-90`}
       >
         <div className='text-sm px-4 py-2 w-max'>{t('promptLibrary')}</div>
         <input
