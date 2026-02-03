@@ -60,6 +60,21 @@ const preprocessLatex = (content: string): string => {
     return `${prefix}$${p1}$`;
   });
 
+  // 修复加粗标记紧邻中文引号的问题
+  // CommonMark 规范要求 ** 后不能紧跟标点（除非 ** 前是空白/标点）
+  // 在 ** 和中文引号之间插入零宽空格以满足规范
+  const CJK_QUOTES = '\u201C\u201D\u2018\u2019\u300C\u300D\u300E\u300F';
+  // 开始标记：**" → **\u200B"
+  processed = processed.replace(
+    new RegExp(`\\*\\*([${CJK_QUOTES}])`, 'g'),
+    '**\u200B$1'
+  );
+  // 结束标记："** → "\u200B**
+  processed = processed.replace(
+    new RegExp(`([${CJK_QUOTES}])\\*\\*`, 'g'),
+    '$1\u200B**'
+  );
+
   // 恢复代码块
   const placeholderRegex = new RegExp(`${placeholder}(\\d+)__`, 'g');
   processed = processed.replace(placeholderRegex, (_, index) => {
