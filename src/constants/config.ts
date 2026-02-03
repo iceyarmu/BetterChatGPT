@@ -20,7 +20,7 @@ export const ModelConfigs = [
     modelName: 'gpt-5.2-thinking',
     apiName: 'gpt-5.2',
     reasoning: 'high',
-    webSearch: 'low',
+    webSearch: 'high',
     displayName: 'GPT 5.2 Thinking',
   },
   {
@@ -51,7 +51,7 @@ export const ModelConfigs = [
   },
   {
     modelName: 'gemini-3-pro',
-    apiName: 'gemini-3-pro-preview-thinking',
+    apiName: 'gemini-3-pro-preview',
     displayName: 'Gemini 3 Pro',
   },
   {
