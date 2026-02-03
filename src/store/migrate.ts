@@ -109,6 +109,10 @@ export const migrateV12 = (persistedState: LocalStorageInterfaceV7oV8) => {
   }
 };
 
+export const migrateV13 = (persistedState: LocalStorageInterfaceV7oV8) => {
+  (persistedState as any).notificationEnabled = true;
+};
+
 export const fix11 = (persistedState: StoreState) => {
   if (!persistedState.defaultChatConfig.model) {
     persistedState.defaultChatConfig.model = defaultModel;

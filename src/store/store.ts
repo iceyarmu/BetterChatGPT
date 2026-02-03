@@ -28,6 +28,7 @@ import {
   migrateV8,
   migrateV10,
   migrateV12,
+  migrateV13,
   fix11,
 } from './migrate';
 
@@ -61,6 +62,7 @@ export const createPartializedState = (state: StoreState) => ({
   enterToSubmit: state.enterToSubmit,
   inlineLatex: state.inlineLatex,
   markdownMode: state.markdownMode,
+  notificationEnabled: state.notificationEnabled,
 });
 
 const useStore = create<StoreState>()(
@@ -76,7 +78,7 @@ const useStore = create<StoreState>()(
     {
       name: 'free-chat-gpt',
       partialize: (state) => createPartializedState(state),
-      version: 13,
+      version: 14,
       migrate: (persistedState, version) => {
         switch (version) {
           case 0:
@@ -103,6 +105,8 @@ const useStore = create<StoreState>()(
           case 11:
           case 12:
             migrateV12(persistedState as LocalStorageInterfaceV7oV8);
+          case 13:
+            migrateV13(persistedState as LocalStorageInterfaceV7oV8);
             break;
         }
         return persistedState as StoreState;

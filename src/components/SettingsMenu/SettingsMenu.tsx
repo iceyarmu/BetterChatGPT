@@ -10,6 +10,7 @@ import LanguageSelector from '@components/LanguageSelector';
 import PromptLibraryMenu from '@components/PromptLibraryMenu';
 import ChatConfigMenu from '@components/ChatConfigMenu';
 import EnterToSubmitToggle from './EnterToSubmitToggle';
+import NotificationToggle from './NotificationToggle';
 import ClearConversation from '@components/Menu/MenuOptions/ClearConversation';
 
 const SettingsMenu = () => {
@@ -42,6 +43,7 @@ const SettingsMenu = () => {
             <ThemeSwitcher />
             <div className='flex flex-col gap-3'>
               <EnterToSubmitToggle />
+              <NotificationToggle />
             </div>
             <ClearConversation />
             <PromptLibraryMenu />

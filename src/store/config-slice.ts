@@ -15,6 +15,7 @@ export interface ConfigSlice {
   enterToSubmit: boolean;
   inlineLatex: boolean;
   markdownMode: boolean;
+  notificationEnabled: boolean;
   setOpenConfig: (openConfig: boolean) => void;
   setTheme: (theme: Theme) => void;
   setAutoTitle: (autoTitle: boolean) => void;
@@ -26,6 +27,7 @@ export interface ConfigSlice {
   setEnterToSubmit: (enterToSubmit: boolean) => void;
   setInlineLatex: (inlineLatex: boolean) => void;
   setMarkdownMode: (markdownMode: boolean) => void;
+  setNotificationEnabled: (notificationEnabled: boolean) => void;
 }
 
 export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
@@ -40,6 +42,7 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
   defaultSystemMessage: _defaultSystemMessage,
   inlineLatex: false,
   markdownMode: true,
+  notificationEnabled: true,
   setOpenConfig: (openConfig: boolean) => {
     set((prev: ConfigSlice) => ({
       ...prev,
@@ -104,6 +107,12 @@ export const createConfigSlice: StoreSlice<ConfigSlice> = (set, get) => ({
     set((prev: ConfigSlice) => ({
       ...prev,
       markdownMode: markdownMode,
+    }));
+  },
+  setNotificationEnabled: (notificationEnabled: boolean) => {
+    set((prev: ConfigSlice) => ({
+      ...prev,
+      notificationEnabled: notificationEnabled,
     }));
   },
 });

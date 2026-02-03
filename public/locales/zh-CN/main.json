@@ -42,5 +42,6 @@
   "submitPlaceholder": "输入消息或点击 [提示词资料库] 以使用提示词…",
   "thinkingBlock": "思考过程",
   "thinking": "思考中",
-  "stopGenerating": "停止生成"
+  "stopGenerating": "停止生成",
+  "notificationEnabled": "启用通知"
 }

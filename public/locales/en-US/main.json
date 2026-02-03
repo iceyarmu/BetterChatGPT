@@ -42,5 +42,6 @@
   "submitPlaceholder": "Type a message or click [Prompt Library] for prompts...",
   "thinkingBlock": "Reasoning",
   "thinking": "Thinking",
-  "stopGenerating": "Stop Generating"
+  "stopGenerating": "Stop Generating",
+  "notificationEnabled": "Enable notifications"
 }

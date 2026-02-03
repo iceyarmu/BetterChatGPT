@@ -42,5 +42,6 @@
   "submitPlaceholder": "메시지를 입력하거나 [프롬프트 라이브러리]를 클릭하여 프롬프트 선택...",
   "thinkingBlock": "추론",
   "thinking": "생각 중",
-  "stopGenerating": "생성 중지"
+  "stopGenerating": "생성 중지",
+  "notificationEnabled": "알림 활성화"
 }

@@ -9,9 +9,11 @@ import { limitMessages } from '@utils/messageUtils';
 import { _defaultChatConfig } from '@constants/chat';
 import { defaultTitleModel, getModelConfig } from '@constants/config';
 import { responsesAPIEndpoint, defaultAPIKey } from '@constants/auth';
+import useNotification from '@hooks/useNotification';
 
 const useSubmit = () => {
   const { t, i18n } = useTranslation('api');
+  const { t: tMain } = useTranslation();
   const error = useStore((state) => state.error);
   const setError = useStore((state) => state.setError);
   const apiEndpoint = responsesAPIEndpoint;  // 仅作为占位符，实际端点由模型配置决定
@@ -20,6 +22,7 @@ const useSubmit = () => {
   const generating = useStore((state) => state.generating);
   const currentChatIndex = useStore((state) => state.currentChatIndex);
   const setChats = useStore((state) => state.setChats);
+  const { showNotification } = useNotification();
 
   const generateTitle = async (
     message: MessageInterface[]
@@ -174,6 +177,22 @@ const useSubmit = () => {
         updatedChats[currentChatIndex].title = title;
         updatedChats[currentChatIndex].titleSet = true;
         setChats(updatedChats);
+      }
+
+      // Send notification if page is not visible
+      const finalChats = useStore.getState().chats;
+      const finalTitle = finalChats?.[currentChatIndex]?.title || (tMain('newChat') as string);
+
+      if (useStore.getState().notificationEnabled && document.hidden) {
+        // Get content preview (first 100 characters, remove line breaks)
+        const lastMessage = finalChats?.[currentChatIndex]?.messages?.slice(-1)[0];
+        const rawContent = lastMessage?.content?.replace(/[\r\n]+/g, ' ') || '';
+        const contentPreview = rawContent.substring(0, 100);
+
+        showNotification(finalTitle, {
+          body: contentPreview + (rawContent.length > 100 ? '...' : ''),
+          tag: `chat-${finalChats?.[currentChatIndex]?.id || 'unknown'}`,
+        });
       }
     } catch (e: unknown) {
       const err = (e as Error).message;

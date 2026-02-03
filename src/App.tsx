@@ -6,6 +6,7 @@ import Chat from '@components/Chat';
 import Menu from '@components/Menu';
 
 import useInitialiseNewChat from '@hooks/useInitialiseNewChat';
+import useNotification from '@hooks/useNotification';
 import { ChatInterface } from '@type/chat';
 import { Theme } from '@type/theme';
 import ApiPopup from '@components/ApiPopup';
@@ -19,6 +20,28 @@ function App() {
   const setApiKey = useStore((state) => state.setApiKey);
   const setCurrentChatIndex = useStore((state) => state.setCurrentChatIndex);
   const addChat = useAddChat();
+
+  // Notification permission check
+  const { isSupported, permission, requestPermission } = useNotification();
+  const notificationEnabled = useStore((state) => state.notificationEnabled);
+  const setNotificationEnabled = useStore((state) => state.setNotificationEnabled);
+
+  // Check and request notification permission on startup
+  useEffect(() => {
+    if (!isSupported) return;
+
+    if (notificationEnabled) {
+      if (permission === 'default') {
+        requestPermission().then((result) => {
+          if (result === 'denied') {
+            setNotificationEnabled(false);
+          }
+        });
+      } else if (permission === 'denied') {
+        setNotificationEnabled(false);
+      }
+    }
+  }, [isSupported, notificationEnabled, permission]);
 
   useEffect(() => {
     document.documentElement.lang = i18n.language;
