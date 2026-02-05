@@ -54,6 +54,8 @@ export const ModelConfigs = [
   {
     modelName: 'gemini-3-pro',
     apiName: 'gemini-3-pro-preview',
+    reasoning: 'high',
+    webSearch: 'high',
     displayName: 'Gemini 3 Pro',
   },
   {
