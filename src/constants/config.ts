@@ -39,12 +39,14 @@ export const ModelConfigs = [
     modelName: 'claude-opus-4-5',
     apiName: 'claude-opus-4-5-20251101',
     reasoning: 'high',
+    webSearch: 'high',
     displayName: 'Claude Opus 4.5',
   },
   {
     modelName: 'claude-sonnet-4-5',
     apiName: 'claude-sonnet-4-5-20250929',
     reasoning: 'high',
+    webSearch: 'high',
     displayName: 'Claude Sonnet 4.5',
   },
   {
