@@ -50,10 +50,6 @@ export const ModelConfigs = [
     displayName: 'Claude Sonnet 4.5',
   },
   {
-    modelName: 'deepseek-r1',
-    displayName: 'DeepSeek R1',
-  },
-  {
     modelName: 'gemini-3-pro',
     apiName: 'gemini-3-pro-preview',
     reasoning: 'high',
@@ -61,7 +57,18 @@ export const ModelConfigs = [
     displayName: 'Gemini 3 Pro',
   },
   {
+    modelName: 'gemini-3-flash',
+    apiName: 'gemini-3-flash-preview',
+    reasoning: 'high',
+    webSearch: 'high',
+    displayName: 'Gemini 3 Flash',
+  },
+  {
     modelName: 'gemini-2.5-flash-lite',
+  },
+  {
+    modelName: 'deepseek-r1',
+    displayName: 'DeepSeek R1',
   },
   {
     modelName: 'grok-4.1-fast',
