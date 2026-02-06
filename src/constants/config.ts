@@ -36,11 +36,11 @@ export const ModelConfigs = [
     displayName: 'GPT 4o',
   },
   {
-    modelName: 'claude-opus-4-5',
-    apiName: 'claude-opus-4-5-20251101',
+    modelName: 'claude-opus-4-6',
+    apiName: 'claude-opus-4-6',
     reasoning: 'high',
     webSearch: 'high',
-    displayName: 'Claude Opus 4.5',
+    displayName: 'Claude Opus 4.6',
   },
   {
     modelName: 'claude-sonnet-4-5',
