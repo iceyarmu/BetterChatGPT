@@ -34,15 +34,35 @@ import ReasoningBlock from './ReasoningBlock';
 
 import CodeBlock from '../CodeBlock';
 
-// 预处理 LaTeX 分隔符：将 \[...\] 转为 $$...$$，将 \(...\) 转为 $...$
-// 跳过代码块以避免误处理
-const preprocessLatex = (content: string): string => {
+// 预处理 Markdown 内容：修复代码围栏格式 + LaTeX 分隔符转换
+const preprocessContent = (content: string): string => {
+  // === 第一步：修复未独占一行的代码围栏 ===
+  // AI 模型有时生成的代码块围栏（```）未独立成行，
+  // 导致 CommonMark 解析器无法识别为代码块
+
+  // Fix 1: 开始围栏未独立成行
+  // 匹配行内文本紧接 ``` 的情况（如 "text```csharp"）
+  let processed = content.replace(/([^\n`])(`{3,}\w*)\s*$/gm, '$1\n$2');
+
+  // Fix 2a: 结束围栏后有尾随文本（有空格）
+  // "``` some text" → "```\nsome text"
+  processed = processed.replace(/^(\s*`{3,})\s+(\S)/gm, '$1\n$2');
+
+  // Fix 2b: 结束围栏后直接紧跟非单词字符文本（无空格）
+  // "```体来操作" → "```\n体来操作"
+  // 排除 \w 以避免误匹配开始围栏的语言标识（如 ```csharp）
+  processed = processed.replace(/^(\s*`{3,})([^\s\w`])/gm, '$1\n$2');
+
+  // === 第二步：转换 LaTeX 分隔符 ===
+  // 将 \[...\] 转为 $$...$$，将 \(...\) 转为 $...$
+  // 跳过代码块以避免误处理
+
   // 使用时间戳占位符，避免与原文冲突
   const placeholder = `__CODEBLOCK_${Date.now()}_`;
   const codeBlocks: string[] = [];
 
   // 保护代码块：支持 3+ 个反引号的代码块和内联代码
-  let processed = content.replace(/(`{3,})[\s\S]*?\1|`[^`]*`/g, (match) => {
+  processed = processed.replace(/(`{3,})[\s\S]*?\1|`[^`]*`/g, (match) => {
     codeBlocks.push(match);
     return `${placeholder}${codeBlocks.length - 1}__`;
   });
@@ -197,7 +217,7 @@ const ContentView = memo(
                 p,
               }}
             >
-              {preprocessLatex(content)}
+              {preprocessContent(content)}
             </ReactMarkdown>
           ) : (
             <span className='whitespace-pre-wrap'>{content}</span>
