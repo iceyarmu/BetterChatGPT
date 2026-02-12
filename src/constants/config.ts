@@ -109,4 +109,4 @@ export const getAllModelNames = (): ModelOptions[] => {
 export const defaultModel: ModelOptions = 'gpt-5.2';
 
 // 自动标题生成使用的模型
-export const defaultTitleModel: ModelOptions = 'gemini-2.5-flash-lite';
+export const defaultTitleModel: ModelOptions = 'gpt-5-nano';
