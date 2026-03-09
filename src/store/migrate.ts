@@ -104,9 +104,6 @@ export const migrateV10 = (persistedState: LocalStorageInterfaceV7oV8) => {
 };
 
 export const migrateV12 = (persistedState: LocalStorageInterfaceV7oV8) => {
-  if (persistedState.defaultChatConfig.model === 'gpt-4o' || persistedState.defaultChatConfig.model === 'gpt-4.1') {
-    persistedState.defaultChatConfig.model = defaultModel;
-  }
 };
 
 export const migrateV13 = (persistedState: LocalStorageInterfaceV7oV8) => {
