@@ -28,11 +28,11 @@ export const ModelConfigs = [
     reasoning: 'minimal',
   },
   {
-    modelName: 'claude-opus-4-6',
-    apiName: 'claude-opus-4-6',
+    modelName: 'claude-opus-4-7',
+    apiName: 'claude-opus-4-7',
     reasoning: 'high',
     webSearch: 'high',
-    displayName: 'Claude Opus 4.6',
+    displayName: 'Claude Opus 4.7',
   },
   {
     modelName: 'claude-sonnet-4-6',
