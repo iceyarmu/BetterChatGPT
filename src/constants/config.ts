@@ -11,17 +11,17 @@ interface ModelConfigBase {
 // 模型配置列表 (使用 as const + satisfies 保留字面量类型并校验结构)
 export const ModelConfigs = [
   {
-    modelName: 'gpt-5.4',
-    apiName: 'gpt-5.4',
+    modelName: 'gpt-5.5',
+    apiName: 'gpt-5.5',
     reasoning: 'none',
-    displayName: 'GPT 5.4',
+    displayName: 'GPT 5.5',
   },
   {
-    modelName: 'gpt-5.4-thinking',
-    apiName: 'gpt-5.4',
+    modelName: 'gpt-5.5-thinking',
+    apiName: 'gpt-5.5',
     reasoning: 'medium',
     webSearch: 'medium',
-    displayName: 'GPT 5.4 Thinking',
+    displayName: 'GPT 5.5 Thinking',
   },
   {
     modelName: 'gpt-5-nano',
@@ -98,7 +98,7 @@ export const getAllModelNames = (): ModelOptions[] => {
 };
 
 // 默认模型
-export const defaultModel: ModelOptions = 'gpt-5.4';
+export const defaultModel: ModelOptions = 'gpt-5.5';
 
 // 自动标题生成使用的模型
 export const defaultTitleModel: ModelOptions = 'gpt-5-nano';
