@@ -20,7 +20,7 @@ export const ModelConfigs = [
     modelName: 'gpt-5.5-thinking',
     apiName: 'gpt-5.5',
     reasoning: 'medium',
-    webSearch: 'medium',
+    // webSearch: 'medium',
     displayName: 'GPT 5.5 Thinking',
   },
   {
@@ -45,14 +45,14 @@ export const ModelConfigs = [
     modelName: 'gemini-3.1-pro',
     apiName: 'gemini-3.1-pro-preview',
     reasoning: 'high',
-    webSearch: 'high',
+    // webSearch: 'high',
     displayName: 'Gemini 3.1 Pro',
   },
   {
     modelName: 'gemini-3-flash',
     apiName: 'gemini-3-flash-preview',
     reasoning: 'high',
-    webSearch: 'high',
+    // webSearch: 'high',
     displayName: 'Gemini 3 Flash',
   },
   // {
@@ -63,9 +63,9 @@ export const ModelConfigs = [
   //   displayName: 'DeepSeek R1',
   // },
   {
-    modelName: 'grok-4.20',
+    modelName: 'grok-4.3',
     reasoning: 'high',
-    displayName: 'Grok 4.2',
+    displayName: 'Grok 4.3',
   },
 ] as const satisfies readonly ModelConfigBase[];
 
