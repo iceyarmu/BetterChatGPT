@@ -1,10 +1,9 @@
 #!/bin/sh
 
 currentShellPath=$(cd "$(dirname "$0")"; pwd)
-remoteHost="slots-mac"
-remotePath="/Users/apple/Software/BetterChatGPT"
+remoteHost="vpn"
+remotePath="/home/ec2-user/BetterChatGPT"
 rsync -av --delete "$currentShellPath/src/" "$remoteHost:$remotePath/src/"
 rsync -av --delete "$currentShellPath/public/" "$remoteHost:$remotePath/public/"
 rsync -av --delete "$currentShellPath/index.html" "$remoteHost:$remotePath/index.html"
-echo "Enter password for $remoteHost:"
-ssh -t $remoteHost "cd $remotePath && sudo ./reload.sh"
+ssh -t $remoteHost "sudo systemctl restart betterchatgpt"
