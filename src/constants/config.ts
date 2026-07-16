@@ -11,50 +11,56 @@ interface ModelConfigBase {
 // 模型配置列表 (使用 as const + satisfies 保留字面量类型并校验结构)
 export const ModelConfigs = [
   {
-    modelName: 'gpt-5.5',
-    apiName: 'gpt-5.5',
+    modelName: 'gpt-5.6-sol',
+    apiName: 'gpt-5.6-sol',
     reasoning: 'none',
-    displayName: 'GPT 5.5',
+    displayName: 'GPT 5.6 Sol',
   },
   {
-    modelName: 'gpt-5.5-thinking',
-    apiName: 'gpt-5.5',
-    reasoning: 'medium',
-    // webSearch: 'medium',
-    displayName: 'GPT 5.5 Thinking',
+    modelName: 'gpt-5.6-sol-thinking',
+    apiName: 'gpt-5.6-sol',
+    reasoning: 'high',
+    displayName: 'GPT 5.6 Sol Thinking',
+  },
+  {
+    modelName: 'gpt-5.6-sol-websearch',
+    apiName: 'gpt-5.6-sol',
+    reasoning: 'high',
+    webSearch: 'high',
+    displayName: 'GPT 5.6 Sol Web Search',
   },
   {
     modelName: 'gpt-5-nano',
     reasoning: 'minimal',
   },
-  {
-    modelName: 'claude-opus-4-7',
-    apiName: 'claude-opus-4-7',
-    reasoning: 'high',
-    webSearch: 'high',
-    displayName: 'Claude Opus 4.7',
-  },
-  {
-    modelName: 'claude-sonnet-4-6',
-    apiName: 'claude-sonnet-4-6',
-    reasoning: 'high',
-    webSearch: 'high',
-    displayName: 'Claude Sonnet 4.6',
-  },
-  {
-    modelName: 'gemini-3.1-pro',
-    apiName: 'gemini-3.1-pro-preview',
-    reasoning: 'high',
-    // webSearch: 'high',
-    displayName: 'Gemini 3.1 Pro',
-  },
-  {
-    modelName: 'gemini-3-flash',
-    apiName: 'gemini-3-flash-preview',
-    reasoning: 'high',
-    // webSearch: 'high',
-    displayName: 'Gemini 3 Flash',
-  },
+  // {
+  //   modelName: 'claude-opus-4-7',
+  //   apiName: 'claude-opus-4-7',
+  //   reasoning: 'high',
+  //   webSearch: 'high',
+  //   displayName: 'Claude Opus 4.7',
+  // },
+  // {
+  //   modelName: 'claude-sonnet-4-6',
+  //   apiName: 'claude-sonnet-4-6',
+  //   reasoning: 'high',
+  //   webSearch: 'high',
+  //   displayName: 'Claude Sonnet 4.6',
+  // },
+  // {
+  //   modelName: 'gemini-3.1-pro',
+  //   apiName: 'gemini-3.1-pro-preview',
+  //   reasoning: 'high',
+  //   // webSearch: 'high',
+  //   displayName: 'Gemini 3.1 Pro',
+  // },
+  // {
+  //   modelName: 'gemini-3-flash',
+  //   apiName: 'gemini-3-flash-preview',
+  //   reasoning: 'high',
+  //   // webSearch: 'high',
+  //   displayName: 'Gemini 3 Flash',
+  // },
   // {
   //   modelName: 'gemini-2.5-flash-lite',
   // },
@@ -62,11 +68,11 @@ export const ModelConfigs = [
   //   modelName: 'deepseek-r1',
   //   displayName: 'DeepSeek R1',
   // },
-  {
-    modelName: 'grok-4.3',
-    reasoning: 'high',
-    displayName: 'Grok 4.3',
-  },
+  // {
+  //   modelName: 'grok-4.3',
+  //   reasoning: 'high',
+  //   displayName: 'Grok 4.3',
+  // },
 ] as const satisfies readonly ModelConfigBase[];
 
 // 从配置中提取所有模型名作为类型
@@ -98,7 +104,7 @@ export const getAllModelNames = (): ModelOptions[] => {
 };
 
 // 默认模型
-export const defaultModel: ModelOptions = 'gpt-5.5';
+export const defaultModel: ModelOptions = 'gpt-5.6-sol';
 
 // 自动标题生成使用的模型
 export const defaultTitleModel: ModelOptions = 'gpt-5-nano';
