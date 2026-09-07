@@ -11,27 +11,27 @@ interface ModelConfigBase {
 // 模型配置列表 (使用 as const + satisfies 保留字面量类型并校验结构)
 export const ModelConfigs = [
   {
-    modelName: 'gpt-5.6-sol',
-    apiName: 'gpt-5.6-sol',
-    reasoning: 'none',
-    displayName: 'GPT 5.6 Sol',
+    modelName: 'gpt-6-astra',
+    apiName: 'gpt-6-astra',
+    reasoning: 'low',
+    displayName: 'GPT 6 Astra',
   },
   {
-    modelName: 'gpt-5.6-sol-thinking',
-    apiName: 'gpt-5.6-sol',
+    modelName: 'gpt-6-astra-thinking',
+    apiName: 'gpt-6-astra',
     reasoning: 'high',
-    displayName: 'GPT 5.6 Sol Thinking',
+    displayName: 'GPT 6 Astra Thinking',
   },
   {
-    modelName: 'gpt-5.6-sol-websearch',
-    apiName: 'gpt-5.6-sol',
+    modelName: 'gpt-6-astra-websearch',
+    apiName: 'gpt-6-astra',
     reasoning: 'high',
     webSearch: 'high',
-    displayName: 'GPT 5.6 Sol Web Search',
+    displayName: 'GPT 6 Astra Web Search',
   },
   {
-    modelName: 'gpt-5-nano',
-    reasoning: 'minimal',
+    modelName: 'gpt-5.6-luna',
+    reasoning: 'none',
   },
   // {
   //   modelName: 'claude-opus-4-7',
@@ -104,7 +104,7 @@ export const getAllModelNames = (): ModelOptions[] => {
 };
 
 // 默认模型
-export const defaultModel: ModelOptions = 'gpt-5.6-sol';
+export const defaultModel: ModelOptions = 'gpt-6-astra';
 
 // 自动标题生成使用的模型
-export const defaultTitleModel: ModelOptions = 'gpt-5-nano';
+export const defaultTitleModel: ModelOptions = 'gpt-5.6-luna';
