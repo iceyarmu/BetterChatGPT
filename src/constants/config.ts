@@ -30,6 +30,12 @@ export const ModelConfigs = [
     displayName: 'GPT 6 Astra Web Search',
   },
   {
+    modelName: 'gpt-5.6-sol',
+    apiName: 'gpt-5.6-sol',
+    reasoning: 'none',
+    displayName: 'GPT 5.6 Sol',
+  },
+  {
     modelName: 'gpt-5.6-luna',
     reasoning: 'none',
   },
@@ -104,7 +110,7 @@ export const getAllModelNames = (): ModelOptions[] => {
 };
 
 // 默认模型
-export const defaultModel: ModelOptions = 'gpt-6-astra';
+export const defaultModel: ModelOptions = 'gpt-5.6-sol';
 
 // 自动标题生成使用的模型
 export const defaultTitleModel: ModelOptions = 'gpt-5.6-luna';
